@@ -10,6 +10,7 @@ import { Gift, Heart } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { layeredSectionTitleSize } from "@/lib/section-typography"
+import "@/components/sections/love-story-red.css"
 
 
 // Refined Garamond for the letter — calligraphic, keepsake feel on the ivory card
@@ -168,15 +169,45 @@ export function Registry() {
         </motion.div>
 
         <div className="relative z-20 mx-auto max-w-2xl px-4 sm:px-6 md:px-8">
+          <div className="relative mt-8 sm:mt-10">
+          {/* Mask & rose pieces hanging off the letter's top-left and bottom-right corners */}
+          {content.corners?.topLeft && (
+            <Image
+              src={content.corners.topLeft}
+              alt=""
+              aria-hidden
+              width={600}
+              height={600}
+              sizes="(max-width: 640px) 34vw, 220px"
+              className="details-card-corner details-card-corner--tl"
+            />
+          )}
+          {content.corners?.bottomRight && (
+            <Image
+              src={content.corners.bottomRight}
+              alt=""
+              aria-hidden
+              width={600}
+              height={600}
+              sizes="(max-width: 640px) 34vw, 220px"
+              className="details-card-corner details-card-corner--br"
+            />
+          )}
           {/* Letter card */}
           <motion.div
-            className="relative mt-8 rounded-[1.75rem] px-7 pb-10 pt-12 text-center sm:mt-10 sm:rounded-[2.25rem] sm:px-12 sm:pb-12 sm:pt-14 md:px-14"
+            className="relative rounded-[1.75rem] px-7 pb-10 pt-12 text-center sm:rounded-[2.25rem] sm:px-12 sm:pb-12 sm:pt-14 md:px-14"
             style={cardStyle}
             variants={staggerVariants}
             initial={initial}
             whileInView="show"
             viewport={{ once: true, amount: 0.05 }}
           >
+            {/* Gilded inner frame */}
+            <span
+              className="pointer-events-none absolute inset-2.5 rounded-[1.4rem] sm:inset-3 sm:rounded-[1.85rem]"
+              style={{ border: `1px solid color-mix(in srgb, ${c.line} 70%, transparent)` }}
+              aria-hidden
+            />
             {/* Seal sitting on the top edge */}
             <motion.div variants={itemVariants} className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
               <span
@@ -364,6 +395,7 @@ export function Registry() {
               <Heart className="mx-auto mt-2 h-3.5 w-3.5" style={{ color: c.eyebrow, fill: c.eyebrow }} aria-hidden />
             </motion.div>
           </motion.div>
+          </div>
 
         </div>
       </section>

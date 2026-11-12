@@ -4,6 +4,7 @@ import { celebrantName } from "@/lib/celebrant"
 import React from "react"
 import { useState, useEffect, useMemo, useRef } from "react"
 import localFont from "next/font/local"
+import Image from "next/image"
 import { Section } from "@/components/section"
 import { sectionType } from "@/lib/section-typography"
 import { cinzel } from "@/lib/fonts"
@@ -52,10 +53,6 @@ const textLift =
 const onBg = { color: "#fff", textShadow: textLift } as const
 const onBgGold = { color: GOLD, textShadow: textLift } as const
 
-const onBgLineStyle = {
-  background: "linear-gradient(to right, transparent, var(--color-welcome-gold), transparent)",
-} as const
-
 const dividerLineStyle = {
   background: "linear-gradient(to right, transparent, var(--color-welcome-gold), transparent)",
 } as const
@@ -72,6 +69,24 @@ const palette = {
   label: ACCENT,
   accent: ACCENT,
 } as const
+
+// Gold rule · Venetian mask emblem · gold rule
+function MaskDivider() {
+  return (
+    <div className="flex items-center justify-center gap-2.5" aria-hidden>
+      <span className="h-px w-12 sm:w-20" style={{ background: "linear-gradient(to right, transparent, var(--color-welcome-gold))" }} />
+      <svg viewBox="0 0 64 28" className="h-auto w-9 sm:w-11" style={{ color: GOLD, filter: "drop-shadow(0 0 5px color-mix(in srgb, var(--color-welcome-gold) 45%, transparent))" }}>
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          d="M32 9.5C26 3.5 14 2.5 4.5 6.5 2.5 7.4 1.6 9.4 2.3 11.4 4.4 19.5 10.4 25 18.2 25c5.6 0 9.6-3.4 13.8-7.2 4.2 3.8 8.2 7.2 13.8 7.2 7.8 0 13.8-5.5 15.9-13.6.7-2-.2-4-2.2-4.9C50 2.5 38 3.5 32 9.5ZM10 12.4c3.2-3.4 10-3.6 14 .4-3 3.4-10 4.4-14-.4Zm44 0c-3.2-3.4-10-3.6-14 .4 3 3.4 10 4.4 14-.4Z"
+        />
+        <path fill="currentColor" d="M32 8.6 29.6 4.2 32 .8l2.4 3.4Z" />
+      </svg>
+      <span className="h-px w-12 sm:w-20" style={{ background: "linear-gradient(to left, transparent, var(--color-welcome-gold))" }} />
+    </div>
+  )
+}
 
 function OutsideDivider() {
   return (
@@ -196,8 +211,8 @@ function EntourageTitle({ title, subtitle }: { title: string; subtitle: string }
       className="welcome-title-lockup relative mx-auto w-full max-w-full text-center"
       style={
         {
-          "--title-size": "clamp(1.35rem, min(6.2vw, 8.5cqi), 3rem)",
-          "--script-size": "clamp(0.78rem, min(3.2vw, 4.8cqi), 1.85rem)",
+          "--title-size": "clamp(2.05rem, min(10.5vw, 12cqi), 4.5rem)",
+          "--script-size": "clamp(1.15rem, min(5.4vw, 6.4cqi), 2.5rem)",
         } as React.CSSProperties
       }
     >
@@ -816,6 +831,31 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
       {/* Red circle pattern (colors: components/sections/love-story-red.css) */}
       <PlainBubbles />
       <RisingMotes count={60} />
+      {/* Mask & rose corner pieces on the section */}
+      {content.corners && (
+        <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            content.corners?.[key] ? (
+              <Image
+                key={key}
+                src={content.corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
       {/* Ghost lettering down the left edge and up the right (same as the loading screen) */}
       <GhostMarquee
         text={ghostTextFor(siteConfig)}
@@ -831,10 +871,10 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
 
       <div className={`relative z-20 mx-auto mb-8 max-w-5xl px-3 text-center @container/entourage sm:mb-10 sm:px-4 md:mb-12 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}>
         <div className="mx-auto mb-4 sm:mb-5 md:mb-6">
-          <OutsideDivider />
+          <MaskDivider />
         </div>
         <p
-          className={`${cinzel.className} mx-auto max-w-[20rem] px-2 text-[0.625rem] font-semibold leading-snug tracking-[0.12em] min-[400px]:max-w-none min-[400px]:text-[0.6875rem] min-[400px]:tracking-[0.16em] sm:text-[0.8125rem] sm:tracking-[0.2em] md:text-sm md:tracking-[0.22em]`}
+          className={`${cinzel.className} mx-auto max-w-[20rem] px-2 text-[0.66rem] font-bold uppercase leading-snug tracking-[0.26em] min-[400px]:max-w-none sm:text-[0.8125rem] sm:tracking-[0.32em] md:text-sm`}
           style={onBgGold}
         >
           {content.eyebrow}
@@ -844,17 +884,14 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
         </div>
 
         <p
-          className="font-goudy-italic mx-auto mt-4 max-w-xl px-2 text-sm leading-relaxed sm:mt-5 sm:text-base md:mt-6"
+          className="font-goudy-italic mx-auto mt-4 max-w-[34rem] px-3 text-[0.9rem] leading-[1.6] sm:mt-5 sm:text-base md:mt-6 md:text-[1.05rem]"
           style={{ ...onBg, fontWeight: 600 }}
         >
           {content.description}
         </p>
 
-        <div className="mt-4 flex items-center justify-center sm:mt-5">
-          <span
-            className="h-px w-16 sm:w-24 md:w-32"
-            style={onBgLineStyle}
-          />
+        <div className="mt-5 sm:mt-6">
+          <OutsideDivider />
         </div>
       </div>
 
@@ -874,7 +911,23 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
               aria-hidden
             />
 
-            <div className="relative z-20 px-5 pb-10 pt-[22%] sm:px-8 sm:pb-12 md:px-12 md:pb-14 lg:px-14">
+            {content.crestImage && (
+              <div
+                className="pointer-events-none absolute left-1/2 top-[5%] z-30 w-[34%] max-w-[230px] -translate-x-1/2"
+                aria-hidden
+              >
+                <Image
+                  src={encodeURI(content.crestImage)}
+                  alt=""
+                  width={1421}
+                  height={1024}
+                  sizes="(max-width: 640px) 34vw, 230px"
+                  className="h-auto w-full drop-shadow-[0_8px_14px_rgba(40,0,8,0.35)]"
+                />
+              </div>
+            )}
+
+            <div className={`relative z-20 px-5 pb-10 sm:px-8 sm:pb-12 md:px-12 md:pb-14 lg:px-14 ${content.crestImage ? "pt-[33%] sm:pt-[30%]" : "pt-[22%]"}`}>
             {isLoading ? (
               <div className="flex items-center justify-center py-24 sm:py-28 md:py-32">
                 <div className="text-center">

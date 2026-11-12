@@ -2,8 +2,10 @@
 
 import type React from "react"
 import { useSiteConfig } from "@/hooks/use-site-config"
+import { fillCelebrant } from "@/lib/celebrant"
 import type { TimelineIconName } from "@/content/site"
-import { motion } from "motion/react"
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "motion/react"
+import { useRef } from "react"
 import { Lora } from "next/font/google"
 import { cinzel } from "@/lib/fonts"
 import localFont from "next/font/local"
@@ -30,8 +32,29 @@ const aboveTheBeyond = localFont({
   variable: "--font-above-beyond",
 })
 
+// Mask & rose corner pieces — sized by screen width, with a soft drop shadow
 const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[80px] sm:max-w-[120px] md:max-w-[170px] lg:max-w-[205px] xl:max-w-[245px] select-none"
+  "block h-auto w-[clamp(92px,26vw,235px)] select-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.5)]"
+
+const entryEase = [0.22, 1, 0.36, 1] as const
+
+// Scroll reveal, staggered per item: medallion pops → illustration settles → text glides in
+const medallionVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.3 },
+  show: { opacity: 1, scale: [0.3, 1.18, 1], transition: { duration: 0.6, ease: entryEase } },
+}
+const iconVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.65, rotate: -10, filter: "blur(4px)" },
+  show: { opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 160, damping: 16 } },
+}
+const textVariants = (fromLeft: boolean): Variants => ({
+  hidden: { opacity: 0, x: fromLeft ? -44 : 44, filter: "blur(6px)" },
+  show: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: entryEase } },
+})
+
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
+
+
 
 // The section has no background and sits on the wine Silk backdrop:
 // white titles, gold times / kicker / script / lines / icons, soft-white descriptions.
@@ -40,7 +63,6 @@ const CREAM = "color-mix(in srgb, white 88%, var(--color-welcome-gold))"
 const PALE = "var(--color-welcome-gold)"
 const GOLD = "var(--color-welcome-gold)"
 const LINE = "color-mix(in srgb, var(--color-welcome-gold) 75%, transparent)"
-const entryEase = [0.22, 1, 0.36, 1] as const
 
 // Soft dark lift keeps light text readable over the moving backdrop
 const titleShadow =
@@ -56,6 +78,8 @@ type TimelineIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>
 interface TimelineEvent {
   time: string
   title: string
+  tag?: string
+  act?: string
   description?: string
   location?: string
   icon: TimelineIcon
@@ -188,11 +212,21 @@ export function WeddingTimeline() {
       .split("{reception}").join(siteConfig.reception.location)
 
   // show: false keeps an event in site.ts but leaves it off the page
+  const actLabel = content.actLabel ?? "Act"
+  const reduceMotion = useReducedMotion()
+  // Scroll progress through the list drives the gold line + spark
+  const timelineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ["start 75%", "end 60%"] })
+  const lineProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.4 })
+  const sparkTop = useTransform(lineProgress, (v) => `${v * 100}%`)
+  const sparkOpacity = useTransform(lineProgress, [0, 0.03, 0.97, 1], [0, 1, 1, 0])
   const timelineEvents: TimelineEvent[] = content.events
     .filter((event) => event && event.show !== false)
-    .map((event) => ({
+    .map((event, i) => ({
     time: event.time,
     title: event.title,
+    tag: event.tag || undefined,
+    act: actLabel ? `${actLabel} ${ROMAN[i] ?? i + 1}` : undefined,
     description: event.description || undefined,
     location: event.location ? fillVenue(event.location) : undefined,
     icon: ICONS[event.icon] ?? RingsIcon,
@@ -242,15 +276,34 @@ export function WeddingTimeline() {
       </div>
 
       {/* Timeline */}
-      <div className="relative z-20 mx-auto max-w-6xl px-3 sm:px-5 lg:px-8">
-        <motion.div
-          className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-px origin-top -translate-x-1/2"
-          initial={{ scaleY: 0, opacity: 0 }}
-          whileInView={{ scaleY: 1, opacity: 1 }}
-          viewport={{ once: true, amount: 0.12 }}
-          transition={{ duration: 1.2, ease: entryEase }}
-          style={{ background: `linear-gradient(to bottom, transparent, ${LINE}, transparent)` }}
+      <div ref={timelineRef} className="relative z-20 mx-auto max-w-6xl px-3 sm:px-5 lg:px-8">
+        {/* Faint track + a gold line that draws down as you scroll, led by a glowing spark */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-px -translate-x-1/2"
+          style={{ background: "linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-welcome-gold) 22%, transparent) 8%, color-mix(in srgb, var(--color-welcome-gold) 22%, transparent) 92%, transparent)" }}
+          aria-hidden
         />
+        <motion.div
+          className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-[2px] origin-top -translate-x-1/2"
+          style={{
+            scaleY: reduceMotion ? 1 : lineProgress,
+            background: `linear-gradient(to bottom, transparent, ${GOLD} 6%, #fff1c4 60%, ${GOLD})`,
+            boxShadow: "0 0 8px color-mix(in srgb, var(--color-welcome-gold) 55%, transparent)",
+          }}
+          aria-hidden
+        />
+        {!reduceMotion && (
+          <motion.span
+            className="pointer-events-none absolute left-1/2 z-0 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              top: sparkTop,
+              opacity: sparkOpacity,
+              background: "radial-gradient(circle, #fffaf0 0%, #fff1c4 45%, transparent 75%)",
+              boxShadow: "0 0 14px 4px rgba(255, 228, 160, 0.7)",
+            }}
+            aria-hidden
+          />
+        )}
 
         <div className="space-y-7 sm:space-y-8 md:space-y-10 lg:space-y-12">
           {timelineEvents.map((event, index) => (
@@ -276,7 +329,7 @@ export function WeddingTimeline() {
                 className={`${cinzel.className} mt-2 sm:mt-3 ${timelineType.label} font-semibold uppercase tracking-[0.18em]`}
                 style={{ color: PALE, textShadow }}
               >
-                — {content.quoteCitation}
+                — {fillCelebrant(content.quoteCitation, siteConfig)}
               </footer>
             ) : null}
           </blockquote>
@@ -290,14 +343,14 @@ export function WeddingTimeline() {
 function TimelineItem({ event, index }: { event: TimelineEvent; index: number }) {
   const Icon = event.icon
   const isEven = index % 2 === 0
-  const fromX = isEven ? -36 : 36
+  const reduceMotion = useReducedMotion()
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: fromX, y: 18, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.78, ease: entryEase }}
+      initial={reduceMotion ? false : "hidden"}
+      whileInView="show"
+      viewport={{ once: true, amount: 0.4, margin: "0px 0px -10% 0px" }}
+      variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
       className="relative z-10"
     >
       <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center gap-x-10 lg:gap-x-14">
@@ -315,16 +368,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
           </div>
         </div>
 
-        <div className="relative flex items-center justify-center">
-          <span
-            className="absolute h-4 w-4 rounded-full"
-            style={{ background: "color-mix(in srgb, var(--color-welcome-gold) 30%, transparent)" }}
-          />
-          <div
-            className="relative h-2 w-2 rounded-full"
-            style={{ background: GOLD, boxShadow: "0 0 10px color-mix(in srgb, var(--color-welcome-gold) 60%, transparent)" }}
-          />
-        </div>
+        <ActMedallion index={index} />
 
         <div>
           <div className="flex items-center justify-start gap-4">
@@ -356,16 +400,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
           </div>
         </div>
 
-        <div className="relative flex items-center justify-center">
-          <span
-            className="absolute h-4 w-4 rounded-full"
-            style={{ background: "color-mix(in srgb, var(--color-welcome-gold) 30%, transparent)" }}
-          />
-          <div
-            className="relative h-2 w-2 rounded-full"
-            style={{ background: GOLD, boxShadow: "0 0 10px color-mix(in srgb, var(--color-welcome-gold) 60%, transparent)" }}
-          />
-        </div>
+        <ActMedallion index={index} />
 
         <div>
           <div className="flex items-center justify-start gap-2 sm:gap-3">
@@ -385,6 +420,31 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
   )
 }
 
+// Numbered gold medallion on the center line
+function ActMedallion({ index }: { index: number }) {
+  return (
+    <motion.div variants={medallionVariants} className="relative flex items-center justify-center">
+      <span
+        className="absolute h-11 w-11 rounded-full sm:h-12 sm:w-12"
+        style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-welcome-gold) 28%, transparent), transparent 70%)" }}
+        aria-hidden
+      />
+      <span
+        className={`${cinzel.className} relative flex h-8 w-8 items-center justify-center rounded-full text-[0.62rem] font-bold tracking-[0.04em] sm:h-9 sm:w-9 sm:text-[0.7rem]`}
+        style={{
+          color: "#f1d79a",
+          background: "radial-gradient(circle at 35% 30%, #5a0a18, #1c0106 75%)",
+          border: "1px solid color-mix(in srgb, var(--color-welcome-gold) 75%, transparent)",
+          boxShadow: "0 0 0 3px rgba(18, 0, 5, 0.6), 0 0 0 4px color-mix(in srgb, var(--color-welcome-gold) 30%, transparent), 0 0 14px color-mix(in srgb, var(--color-welcome-gold) 35%, transparent)",
+        }}
+        aria-hidden
+      >
+        {ROMAN[index] ?? index + 1}
+      </span>
+    </motion.div>
+  )
+}
+
 function TimelineText({
   event,
   align,
@@ -395,15 +455,40 @@ function TimelineText({
   const textAlign = align === "right" ? "text-right" : "text-left"
 
   return (
-    <div className={`max-w-md ${textAlign} ${align === "right" ? "ml-auto" : "mr-auto"}`}>
+    <motion.div
+      variants={textVariants(align === "right")}
+      className={`w-full max-w-md ${textAlign} ${align === "right" ? "ml-auto" : "mr-auto"}`}
+    >
+      {event.act && (
+        <p
+          className={`${cinzel.className} text-[0.55rem] font-bold uppercase tracking-[0.3em] sm:text-[0.6rem]`}
+          style={{ color: "color-mix(in srgb, var(--color-welcome-gold) 70%, transparent)" }}
+        >
+          {event.act}
+        </p>
+      )}
       <p
-        className={`${cinzel.className} ${timelineType.label} font-semibold tracking-[0.2em] uppercase`}
-        style={{ color: PALE, textShadow }}
+        className={`${cinzel.className} mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 ${align === "right" ? "justify-end" : "justify-start"}`}
       >
-        {event.time}
+        <span className="text-[0.9rem] font-bold tracking-[0.12em] sm:text-base" style={{ color: "#f1d79a", textShadow }}>
+          {event.time}
+        </span>
+        {event.tag && (
+          <span
+            className="rounded-full border px-2 py-0.5 text-[0.5rem] font-semibold uppercase tracking-[0.16em] sm:text-[0.56rem]"
+            style={{ color: CREAM, borderColor: "color-mix(in srgb, var(--color-welcome-gold) 45%, transparent)" }}
+          >
+            {event.tag}
+          </span>
+        )}
       </p>
+      <span
+        className={`my-2 block h-px w-10 ${align === "right" ? "ml-auto" : ""}`}
+        style={align === "right" ? lineRight : lineLeft}
+        aria-hidden
+      />
       <p
-        className={`${theSeasons.className} mt-1 text-[1.15rem] leading-tight tracking-[0.04em] sm:text-[1.25rem] md:text-[1.175rem]`}
+        className={`${theSeasons.className} text-[1.02rem] leading-tight tracking-[0.04em] sm:text-[1.2rem] md:text-[1.2rem]`}
         style={{ color: IVORY, textShadow: titleShadow }}
       >
         <SpecialCharFont text={event.title} />
@@ -411,7 +496,7 @@ function TimelineText({
 
       {event.description && (
         <p
-          className={`${lora.className} ${timelineType.textRelaxed} mt-1.5 font-medium`}
+          className={`${lora.className} mt-2 text-[0.78rem] leading-[1.55] sm:text-[0.875rem] md:text-[0.9rem] font-medium`}
           style={{ color: CREAM, textShadow }}
         >
           {event.description}
@@ -426,7 +511,7 @@ function TimelineText({
           {event.location}
         </p>
       )}
-    </div>
+    </motion.div>
   )
 }
 
@@ -441,6 +526,7 @@ function IconMark({
 }) {
   if (imageSrc) {
     return (
+      <motion.div variants={iconVariants} className="shrink-0">
       <Image
         src={imageSrc}
         alt=""
@@ -453,11 +539,13 @@ function IconMark({
         // white fills sink into the dark backdrop (keeps detail in filled illustrations)
         style={{ filter: "grayscale(1) invert(1) sepia(1) saturate(2.4) hue-rotate(-8deg) brightness(0.92) drop-shadow(0 2px 6px color-mix(in srgb, var(--color-coastal-deep) 45%, transparent))" }}
       />
+      </motion.div>
     )
   }
 
   return (
-    <div
+    <motion.div
+      variants={iconVariants}
       className={`${
         mobile ? "h-20 w-20 sm:h-24 sm:w-24" : "h-16 w-16 lg:h-18 lg:w-18"
       } flex items-center justify-center rounded-full border`}
@@ -471,7 +559,7 @@ function IconMark({
       <Icon
         className={`${mobile ? "h-10 w-10" : "h-8 w-8 lg:h-9 lg:w-9"}`}
       />
-    </div>
+    </motion.div>
   )
 }
 

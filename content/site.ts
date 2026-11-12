@@ -260,7 +260,7 @@ const SITE_URL = "https://jennia-liyen-hecita-bauden-debut.weddinginvitationrsvp
 // Image shown when the link is shared (Facebook, Messenger, Viber, X, …).
 // Messenger is strict: use a JPG exactly 1200×630, under ~300 KB. When you replace it,
 // change the file name (or bump ?v=) so Facebook fetches the new one instead of its cache.
-const LINK_PREVIEW_IMAGE = "/Details/linkPreview.png?v=2"
+const LINK_PREVIEW_IMAGE = "/Details/LinkPreview.png?v=2"
 const LINK_PREVIEW_IMAGE_SIZE = { width: 1200, height: 630, type: "image/jpeg" }
 
 // Site address with env override applied and no trailing slash — no need to edit
@@ -288,7 +288,7 @@ const BRAND = {
   nameImage: "",
   seal: "/monogram/seal.png", // envelope wax seal
   // Theme song — drop the MP3 into /public/background_music with this exact name
-  backgroundMusic: "/background_music/Bruno Mars - Just the Way You Are [Official Instrumental].mp3", // ⚠ check — file not added yet
+  backgroundMusic: "/background_music/𝐃𝐢𝐧𝐢𝐧𝐠 𝐰𝐢𝐭𝐡 𝐚 𝐕𝐢𝐜𝐭𝐨𝐫𝐢𝐚𝐧 𝐕𝐚𝐦𝐩𝐢𝐫𝐞 𝐃𝐚𝐫𝐤 𝐕𝐚𝐦𝐩𝐢𝐫𝐞 𝐖𝐚𝐥𝐭𝐳 𝐌𝐮𝐬𝐢𝐜 (mp3cut.net).mp3", // ⚠ check — file not added yet
 }
 
 // Celebrant photos used in "photos" mode (loader, envelope, hero, reminders,
@@ -347,7 +347,7 @@ const SECTION_DECOS = {
 
 // Principal sponsors Google Apps Script — used by the main page and /inviteone
 // ⚠ check — every googleAPI URL below still points to the template's sheets.
-const SPONSORS_API = "https://script.google.com/macros/s/AKfycbzYUCNcwFtjNEnOaKZKS733y2RlTJu2B2wsfIQd264aucylvWqdTarS_npSneDMPN3E/exec"
+const SPONSORS_API = "https://script.google.com/macros/s/AKfycbyshIGnzkJcoUYvyp87stqt7njnZKNKF0klc0PWQU8PM8Dz17P6LyaipJ9XRfxljjqR/exec"
 
 export const siteConfig = {
   siteUrl: SITE_URL,
@@ -391,16 +391,16 @@ export const siteConfig = {
     backgroundMusic: BRAND.backgroundMusic,
   },
   googleAPI:{
-    messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSdgZaRdbq48K29WnLbEYQ3NkNLhOtyL71xD0n0k2fSjm79H3A/formResponse", // ⚠ check
-    message: "https://script.google.com/macros/s/AKfycbwyBqOm8h0nHehsm8GicfyTyv14z-wEKEOtXitb6jHTkIEuhwWb9xmQ156GRa4cMSc/exec", // ⚠ check
-    guestList: "https://script.google.com/macros/s/AKfycbz5-5iDaJ8wY3imn1N0nQsntxob7_SXxZAAZSZcaR89QW-b1qe-vnuJls9TaifDrtgo/exec", // ⚠ check
-    guestRequest: "https://script.google.com/macros/s/AKfycbzQypryWOI3SAuj85o_v2GDmM31AAsYzaBSPEIM5a7LYHUb7D8fRk4xTjPbGcSlUJP7/exec", // ⚠ check
-    entourage: "https://script.google.com/macros/s/AKfycbwmRP5CV9OIXF9LgdZpTAj1ivYrTSGWH4gfSpW7Mi1c1e2JF58_jyYSSmARmNRLL0c/exec", // ⚠ check
+    messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSe1oN68s4ojBnxnF_c8O7zHgum9xUpA1TMHT3Eye5UO4gKUDg/formResponse", // ⚠ check
+    message: "https://script.google.com/macros/s/AKfycby7aSB3uTOvlk9uIv7JukMQpBAKhdsCDVANNns2LOj8Shlcuzxbp_L5XbV3qctDwIbt/exec", // ⚠ check
+    guestList: "https://script.google.com/macros/s/AKfycbxqGbIQf6gChhaufmN9KksmPUKYuA12AiFL-tj7NBB2aAgy7f1lqrdWmcP8xb44faUR/exec", // ⚠ check
+    guestRequest: "https://script.google.com/macros/s/AKfycbxkOXKtljDYPU7lwmAqfoUjY9MmewJ6mXMoqwRqr64n4zwNlssu2HisUFbfStF4fs5o/exec", // ⚠ check
+    entourage: "https://script.google.com/macros/s/AKfycbxHWKLlyzQSMd9bauGFZF3g0MzfaIMtGAyGGkIkXqJxtQ7XgpcELwfo9gj8GLfGINuI/exec", // ⚠ check
     sponsors: SPONSORS_API,
     // Principal sponsors shown on /inviteone and /invitetwo (entourage section)
     sponsorsInviteOne: SPONSORS_API,
-    sponsorsInviteTwo: "https://script.google.com/macros/s/AKfycbzYUCNcwFtjNEnOaKZKS733y2RlTJu2B2wsfIQd264aucylvWqdTarS_npSneDMPN3E/exec",
-    googleShare: "https://docs.google.com/spreadsheets/d/170P-W4QTKoT39w7qFQqvFtghDfDjbaCmKc807-_jY2A/edit?usp=sharing", // ⚠ check
+    sponsorsInviteTwo: "https://script.google.com/macros/s/AKfycbyshIGnzkJcoUYvyp87stqt7njnZKNKF0klc0PWQU8PM8Dz17P6LyaipJ9XRfxljjqR/exec",
+    googleShare: "https://docs.google.com/spreadsheets/d/146ZQb9Lx1JPX-WpL3h0BhkLf3cBgYxhQ9sUEy4uk5KY/edit?usp=sharing", // ⚠ check
     videoMessageForm:
       "https://docs.google.com/forms/d/e/1FAIpQLSfeGlEl4CMXWefdvCw6AOPHFS1ROku_rs-Gbofa2LkVJ0sLGQ/viewform",
   },
@@ -806,34 +806,38 @@ export const siteConfig = {
   // Program flow (components/sections/wedding-timeline.tsx) — from the client brief
   weddingTimeline: {
     // Built from EVENT_DATE + TIMES so it always matches Event Details
-    kicker: `${EVENT_DATE.replace(/,\s*\d{4}$/, "")} · Doors ${TIMES.guestArrival} · Program ${TIMES.program}`,
-    title: "Program",
-    subtitle: "the night unfolds",
+    kicker: `${EVENT_DAY}, ${EVENT_DATE.replace(/,\s*\d{4}$/, "")} · Doors ${TIMES.guestArrival} · Grand Reveal ${TIMES.program}`,
+    title: "The Program",
+    subtitle: "an evening in six acts",
     description:
-      "From the first welcome to the final farewell, here is how the evening will unfold.",
-    quote: "She is clothed in strength and dignity, and she laughs without fear of the future.",
-    quoteCitation: "Proverbs 31:25",
-    // Optional corner decorations — leave "" to hide
+      "From the first masked arrival to the final toast — here is how the mystery will unfold.",
+    // Word before each event's number, e.g. "Act I" ("" hides the numbering)
+    actLabel: "Act",
+    quote: "Behind every mask is a story. Tonight, the first chapter begins.",
+    quoteCitation: "{celebrant}",
+    // Corner decorations — mask & rose pieces ("" hides one)
     decos: {
-      topLeft: "",
-      topRight: "",
-      bottomLeft: "",
-      bottomRight: "",
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
     },
     // Each event — shown top to bottom in this order (move a block to reorder):
     //   show:     false = hide it (kept here to edit later)
+    //   tag:      small label beside the time, e.g. "Guests Arrival" ("" to hide)
     //   location: text under the title; {ceremony} / {reception} → venue name ("" to hide)
     //   image:    line-art illustration in /public/debut-timeline (black on transparent,
-    //             shown pearl-white); "" uses the icon instead
+    //             shown gold); "" uses the icon instead
     //   icon:     "sun" | "moon" | "crown" | "rose" | "gift" | "toast" | "candle" |
     //             "music" | "video" | "dinner" | "arrival" | "dance" | "departure" | …
-    //   description: optional extra line ("" to hide)
+    //   description: one short line about the moment ("" to hide)
     events: [
       {
         show: true,
         time: "6:00 PM",
         title: "The Venetian Arrival",
-        description: "",
+        tag: "Guests Arrival", // small label beside the time ("" hides it)
+        description: "Masks on and dressed in noir — arrive, find your seat, and let the candlelit ballroom set the mood.",
         location: "",
         image: "/debut-timeline/message.png",
         icon: "arrival" as TimelineIconName,
@@ -842,7 +846,8 @@ export const siteConfig = {
         show: true,
         time: "6:30 PM",
         title: "The Grand Reveal Entrance",
-        description: "",
+        tag: "", // small label beside the time ("" hides it)
+        description: "The curtains part and the debutante makes her grand entrance into the masquerade.",
         location: "",
         image: "/debut-timeline/assembly.png",
         icon: "crown" as TimelineIconName,
@@ -851,7 +856,8 @@ export const siteConfig = {
         show: true,
         time: "7:00 PM",
         title: "The Mystery Waltz",
-        description: "",
+        tag: "", // small label beside the time ("" hides it)
+        description: "A masked waltz opens the dance floor — an elegant first dance in the spirit of a Venetian ball.",
         location: "",
         image: "/debut-timeline/dance-party.png",
         icon: "dance" as TimelineIconName,
@@ -860,7 +866,8 @@ export const siteConfig = {
         show: true,
         time: "7:30 PM",
         title: "Royal Banquet & Parlor Games",
-        description: "",
+        tag: "", // small label beside the time ("" hides it)
+        description: "Dinner is served, followed by parlor games that bring every table into the fun.",
         location: "",
         image: "/debut-timeline/dinner.png",
         icon: "dinner" as TimelineIconName,
@@ -869,7 +876,8 @@ export const siteConfig = {
         show: true,
         time: "8:30 PM",
         title: "The Grand Countdown & Unmasking Hour",
-        description: "",
+        tag: "", // small label beside the time ("" hides it)
+        description: "Together we count down to the stroke of the hour — and at the final second, every mask comes off.",
         location: "",
         image: "/debut-timeline/18roses-candle-lighting.png",
         icon: "candle" as TimelineIconName,
@@ -878,7 +886,8 @@ export const siteConfig = {
         show: true,
         time: "9:00 PM",
         title: "The Illuminated Pathway & The Grand Toast",
-        description: "",
+        tag: "", // small label beside the time ("" hides it)
+        description: "The lights lead the way to a final toast — to eighteen, and to every chapter still to come.",
         location: "",
         image: "/debut-timeline/debutant-speech.png",
         icon: "toast" as TimelineIconName,
@@ -893,12 +902,22 @@ export const siteConfig = {
     // sheet — it lists a previous client's wedding party (Parents of the Groom/Bride,
     // Best Man, …). Swap in Lilay's own sheet before sharing the invitation.
     show: true,
-    eyebrow: "My Eighteen",
+    eyebrow: "The Masquerade Court",
     title: "The Entourage",
-    subtitle: "roses, treasures & cheers",
-    description: "Honoring the people who shaped my first eighteen years",
+    subtitle: "my court of the evening",
+    description:
+      "The cherished hearts who will stand beside me on the night the masks come off — family, friends, and everyone who shaped my first eighteen years.",
+    // Ornate mask at the top of the arched card ("" hides it)
+    crestImage: "/images/Ornate Venetian Masquerade Mask with Red Feathers.png",
+    // Mask & rose corner pieces on the section ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     coupleKicker: "The Debutante",
-    coupleLine: "Eighteen years of grace",
+    coupleLine: "Eighteen years behind the mask",
     coupleHeading: "The Celebrant",
     celebrantRole: "Debutante",
     // Kept for the template — not shown on a debut
@@ -1114,40 +1133,58 @@ export const siteConfig = {
   //   [link text](#section-id) → a link that smoothly scrolls to that section
   //   A blank line (\n\n) starts a new paragraph; lines starting with "• " show as a bulleted list
   faq: {
-    eyebrow: "Before the Night",
+    eyebrow: "Before the Masquerade",
     title: "Frequently Asked Questions",
-    subtitle: "everything you need to know",
+    subtitle: "secrets worth sharing",
     description:
-      "A few gentle notes so you can simply arrive, celebrate, and enjoy the night with me.",
+      "A few gentle notes so you can simply arrive, put on your mask, and enjoy the night with me.",
+    // Mask & rose pieces: section corners + two corners of the question card ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     decos: { ...SECTION_DECOS },
     // In answers: {deadline}, {coordinator}, {contact}, {celebrant}, {guestsTime},
-    // {programTime}, {endTime}, {venueName}, {venueAddress} are filled in, and
-    // [label](#section-id) becomes a link that scrolls to that section.
+    // {programTime}, {endTime}, {venueName}, {venueAddress} are filled in,
+    // [label](#section-id) becomes a link that scrolls to that section, a blank line
+    // starts a new paragraph, and lines starting with "• " show as a list.
     items: [
       {
         question: "How do I RSVP?",
         answer:
-          "Simply open the [RSVP](#guest-list) card on this invitation, search for your name, and confirm whether you can join us.\n\nKindly respond by {deadline} so we can prepare your seat.\n\nFor any questions, please reach out to {coordinator}{contact}.",
+          "Open the [RSVP](#guest-list) card on this invitation, search for your name, and confirm whether you can join the masquerade.\n\nKindly respond by {deadline} so your seat can be prepared.\n\nFor any questions, please reach out to {coordinator}{contact}.",
       },
       {
-        question: "What should I wear?",
+        question: "What is the dress code?",
         answer:
-          "Our dress code is Elegant Noir & Masquerade Venetian — please strictly follow our all-black formal palette.\n\n• Ladies: a formal or semi-formal black long gown, elegant black dresses, or formal black long skirts.\n• Gentlemen: a black long-sleeved polo shirt with trousers, a suit, or a tuxedo.\n\nGraphic t-shirts and casual streetwear are strictly not allowed. See the [Attire Guidelines](#details) for more.",
+          "Elegant Noir & Masquerade Venetian. To keep the ball mysterious and unified, we kindly ask every guest to follow our all-black formal palette.\n\n• Ladies: a formal or semi-formal black long gown, an elegant black dress, or a formal black long skirt.\n• Gentlemen: a black long-sleeved polo shirt with trousers, a suit, or a tuxedo.\n\nGraphic t-shirts and casual streetwear are strictly not allowed. See the [Attire Guidelines](#details) for more.",
+      },
+      {
+        question: "Do I need to bring a mask?",
+        answer:
+          "Yes — it's a masquerade! Any Venetian or masquerade mask is welcome; touches of gold or red look beautiful with the all-black dress code.\n\nKeep it on through the evening until the Grand Countdown & Unmasking Hour, when every mask comes off together.",
       },
       {
         question: "What time should I arrive?",
         answer:
-          "Doors open at {guestsTime} and the program begins at {programTime}. Please arrive a little early so you can find your seat and not miss the debutante's grand entrance.",
+          "Doors open at {guestsTime} for the Venetian Arrival, and the Grand Reveal Entrance begins at {programTime}. Please arrive a little early so you can find your seat and not miss the debutante's entrance.",
       },
       {
-        question: "Where is the celebration?",
+        question: "Where is the masquerade?",
         answer:
-          "The masquerade will be held at {venueName}, {venueAddress}. Tap Get Directions in [Event Details](#details) or scan the QR code to open the map.",
+          "At {venueName}, {venueAddress}.\n\nTap Get Directions in [Event Details](#details) or scan the QR code there to open the map.",
+      },
+      {
+        question: "What happens during the evening?",
+        answer:
+          "The night unfolds in six acts:\n\n• The Venetian Arrival\n• The Grand Reveal Entrance\n• The Mystery Waltz\n• Royal Banquet & Parlor Games\n• The Grand Countdown & Unmasking Hour\n• The Illuminated Pathway & The Grand Toast\n\nSee the full [Program](#wedding-timeline) for the times.",
       },
       {
         question: "May I bring a plus one?",
         answer:
-          "Seating is limited and the celebration is by invitation only. Kindly RSVP only for the number of seats reserved under your name.",
+          "Seating is limited and the masquerade is by invitation only. Kindly RSVP only for the number of seats reserved under your name.",
       },
       {
         question: "What if I can no longer attend?",
@@ -1155,42 +1192,50 @@ export const siteConfig = {
           "Please let us know as soon as you can, so your seat can be offered to another guest.",
       },
       {
-        question: "Should I bring a mask?",
-        answer:
-          "Yes! This is a modern Venetian Masquerade — bring your mask and wear it until the Grand Countdown & Unmasking Hour.",
-      },
-      {
         question: "May I take photos and videos?",
         answer:
-          "Of course! We'd love to see the night through your eyes — share them using the hashtags in [Snap & Share](#snap-share).\n\nDuring the grand entrance, the 18 Roses, and the candle blowing, kindly give way to the official photographers.",
+          "Of course! We'd love to see the night through your eyes — share them in [Snap & Share](#snap-share) with our hashtags.\n\nDuring the Grand Reveal Entrance, the Mystery Waltz, and the Unmasking Hour, kindly give way to the official photographers.",
       },
       {
         question: "I'm one of the 18 Candles. What should I prepare?",
         answer:
-          "Instead of a spoken message, {celebrant} would love to receive a handwritten letter from each of her 18 Candles.\n\nWrite from the heart — a memory you share, a wish for her future, or simply what she means to you. These letters will be kept and treasured as keepsakes she can look back on for years to come.",
+          "Instead of a spoken message, {celebrant} would love to receive a handwritten letter from each of her 18 Candles.\n\nWrite from the heart — a memory you share, a wish for her future, or simply what she means to you. These letters will be kept and treasured for years to come.",
       },
       {
-        question: "How long is the celebration?",
+        question: "What time does the evening end?",
         answer:
-          "Guests arrive at {guestsTime} and the Grand Reveal Entrance begins at {programTime}. The night ends with the Illuminated Pathway & the Grand Toast at 9:00 PM.",
+          "The program closes with the Illuminated Pathway & the Grand Toast at 9:00 PM — stay until the very end so you don't miss the final toast.",
       },
       {
         question: "I have dietary restrictions or allergies.",
         answer:
           "Please mention them when you RSVP, or let {coordinator} know, so the kitchen can prepare something just for you.",
       },
+      {
+        question: "Is there a gift registry?",
+        answer:
+          "Your presence is the greatest gift. If you wish to give something more, you'll find a gentle note in the [Gift Guide](#registry).",
+      },
     ],
   },
   // Gift guide (components/sections/registry.tsx).
   registry: {
+    // Mask & rose pieces on two corners of the letter card ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     eyebrow: "A Token of Love",
     title: "Gift Guide",
     subtitle: "with gratitude",
-    description: "Your presence on my eighteenth is the best gift I could ask for.",
+    description: "Your presence at the masquerade is the finest gift I could ask for.",
+    // First paragraph: "Salutation — letter…" shows the salutation as an engraved heading
     paragraphs: [
-      "Having you with me on my debut is already a precious blessing. If you wish to give a gift, a monetary gift toward my studies and dreams would be deeply appreciated — but your love, prayers, and presence mean the most.",
+      "Dear family and friends — sharing this milestone with the people who shaped my story already means more than words can hold. Your presence on the night the masks come off is the greatest gift of all.",
+      "Should you wish to honor me with something more, a monetary blessing toward my studies and the dreams of this new chapter would be warmly appreciated.",
+      "Above all, simply come as you are — masked, merry, and ready to celebrate. Your love and prayers are the treasures I will keep long after the music fades.",
     ],
-    thankYou: "", // "" hides the line
+    thankYou: "Thank you for being part of my story.", // "" hides the line
     signOff: "With a grateful heart,",
     signature: "", // "" falls back to the celebrant's nickname
     // Colors — any CSS color or a palette token from app/globals.css (e.g. "var(--color-motif-accent)")
@@ -1212,7 +1257,7 @@ export const siteConfig = {
     //   showAccounts: false hides the whole block
     //   show:  false hides one account
     //   qr:    "/QR/BPI.png" to show a QR image, or "" when you have no QR
-    showAccounts: true,
+    showAccounts: false, // hidden: no QR codes or e-gift accounts on the page
     accountsTitle: "For e-gifts",
     // Small italic note under the QR ("" hides it)
     accountsNote: "Sample image for display only — not yet official.", // ⚠ check — clear once the real QR codes are in
@@ -1560,8 +1605,8 @@ export const siteConfig = {
     // Leave any path "" to hide that decoration
     decos: { ...CORNER_DECOS, headerOrnament: DECOR.headerOrnament },
     // ⚠ check — Spotify link for "Goth" by Sidewalks and Skeletons (track, playlist or album links all work)
-    embedUrl: "https://open.spotify.com/embed/playlist/1YChzOo1Wj6GrTcnz0ap5C?utm_source=generator&si=49d7c00b589b4840",
-    spotifyUrl: "https://open.spotify.com/playlist/1YChzOo1Wj6GrTcnz0ap5C",
+    embedUrl: "https://open.spotify.com/embed/playlist/2rdoTgcClqsSfL7rz5w1WY?utm_source=generator&si=e985bd36136a4689",
+    spotifyUrl: "https://open.spotify.com/playlist/2rdoTgcClqsSfL7rz5w1WY",
   },
   // Closing "See you there!" section (components/sections/see-you-there.tsx).
   //   photos mode (loadingScreen.display "photos") → full-screen celebrant photo
@@ -1593,6 +1638,13 @@ export const siteConfig = {
   // Footer (components/sections/footer.tsx).
   // {celebrant} → nickname, {year} → current year. Date comes from ceremony, deadline from details.rsvp.
   footer: {
+    // Mask & rose corner pieces on the footer ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     showMonogram: true, // celebrant.monogram, tinted to the motif
     // Small line under the name, e.g. "turns eighteen" ("" to hide)
     nameLine: `turns ${CELEBRANT.ageWords.toLowerCase()}`,
@@ -1665,7 +1717,7 @@ export const siteConfig = {
   snapShare: {
     // ⚠ check — Google Drive upload folder + its QR are still from the template
     googleDriveLink:
-      "https://drive.google.com/drive/folders/1rEQ9rWDcrkZ9OCVfP9MUAtKS6QFuznCY?usp=sharing",
+      "https://drive.google.com/drive/folders/1yLq1yU22_AS25bO_nV3Bj-2eD2ue91Oq?usp=sharing",
     albumQR: "/QR/AlbumQR.png",
     hashtag: HASHTAGS,
     instructions: "Please scan this QR code and upload the photos and videos you took during the debut. I'd love to see the night through your eyes!",

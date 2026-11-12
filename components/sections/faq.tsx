@@ -3,6 +3,7 @@
 import { celebrantName } from "@/lib/celebrant"
 import { useState, type CSSProperties, type ReactNode } from "react"
 import { ChevronDown } from "lucide-react"
+import Image from "next/image"
 import { motion, useReducedMotion, type Variants } from "motion/react"
 import { Lora, Playfair_Display } from "next/font/google"
 import { cinzel } from "@/lib/fonts"
@@ -101,13 +102,20 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
 }
 
-// Sits directly on the red pattern: gold hairlines + diamond
+// Sits directly on the red pattern: gold hairlines + Venetian mask emblem
 function DiamondDivider() {
   return (
-    <div className="flex items-center justify-center gap-2" aria-hidden>
-      <span className="h-px w-10 sm:w-16" style={{ background: "linear-gradient(to right, transparent, var(--color-welcome-gold))" }} />
-      <span className="h-1.5 w-1.5 rotate-45" style={{ background: GOLD }} />
-      <span className="h-px w-10 sm:w-16" style={{ background: "linear-gradient(to left, transparent, var(--color-welcome-gold))" }} />
+    <div className="flex items-center justify-center gap-2.5" aria-hidden>
+      <span className="h-px w-12 sm:w-20" style={{ background: "linear-gradient(to right, transparent, var(--color-welcome-gold))" }} />
+      <svg viewBox="0 0 64 28" className="h-auto w-9 sm:w-11" style={{ color: GOLD, filter: "drop-shadow(0 0 5px color-mix(in srgb, var(--color-welcome-gold) 45%, transparent))" }}>
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          d="M32 9.5C26 3.5 14 2.5 4.5 6.5 2.5 7.4 1.6 9.4 2.3 11.4 4.4 19.5 10.4 25 18.2 25c5.6 0 9.6-3.4 13.8-7.2 4.2 3.8 8.2 7.2 13.8 7.2 7.8 0 13.8-5.5 15.9-13.6.7-2-.2-4-2.2-4.9C50 2.5 38 3.5 32 9.5ZM10 12.4c3.2-3.4 10-3.6 14 .4-3 3.4-10 4.4-14-.4Zm44 0c-3.2-3.4-10-3.6-14 .4 3 3.4 10 4.4 14-.4Z"
+        />
+        <path fill="currentColor" d="M32 8.6 29.6 4.2 32 .8l2.4 3.4Z" />
+      </svg>
+      <span className="h-px w-12 sm:w-20" style={{ background: "linear-gradient(to left, transparent, var(--color-welcome-gold))" }} />
     </div>
   )
 }
@@ -243,6 +251,7 @@ export function FAQ() {
       .split("{venueAddress}").join(siteConfig.ceremony.venue ?? "")
 
   const initial = reduceMotion ? false : "hidden"
+  const corners = content.corners ?? siteConfig.loadingScreen?.gala?.corners
 
   return (
     <div
@@ -252,6 +261,31 @@ export function FAQ() {
       {/* Red circle pattern (colors: components/sections/love-story-red.css) */}
       <PlainBubbles />
       <RisingMotes count={30} />
+      {/* Mask & rose corner pieces on the section */}
+      {corners && (
+        <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
       {/* Ghost lettering down the left edge and up the right (same as the loading screen) */}
       <GhostMarquee
         text={ghostTextFor(siteConfig)}
@@ -264,7 +298,6 @@ export function FAQ() {
         id="faq"
         className="relative z-10 overflow-hidden pt-14 pb-12 sm:pt-16 sm:pb-14 md:pt-20 md:pb-16 lg:pt-24 lg:pb-20"
       >
-        {/* Corner decorations (from site.ts) */}
 
         {/* Header */}
         <motion.div
@@ -300,6 +333,32 @@ export function FAQ() {
 
         {/* Questions */}
         <div className="relative z-20 mx-auto max-w-3xl px-4 sm:px-6 md:px-8">
+          <div className="relative">
+          {/* Mask (top-right) and rose (bottom-left) hanging off the question card */}
+          {corners?.topRight && (
+            <Image
+              src={corners.topRight}
+              alt=""
+              aria-hidden
+              width={600}
+              height={600}
+              sizes="(max-width: 640px) 34vw, 220px"
+              className="details-card-corner details-card-corner--tr"
+              style={{ width: "clamp(78px, 22vw, 170px)" }}
+            />
+          )}
+          {corners?.bottomLeft && (
+            <Image
+              src={corners.bottomLeft}
+              alt=""
+              aria-hidden
+              width={600}
+              height={600}
+              sizes="(max-width: 640px) 34vw, 220px"
+              className="details-card-corner details-card-corner--bl"
+              style={{ width: "clamp(78px, 22vw, 170px)" }}
+            />
+          )}
           <motion.div
             className="relative overflow-hidden rounded-[1.75rem] sm:rounded-[2.25rem]"
             style={cardStyle}
@@ -308,8 +367,14 @@ export function FAQ() {
             whileInView="show"
             viewport={{ once: true, amount: 0.1 }}
           >
+            {/* Gilded inner frame */}
+            <span
+              className="pointer-events-none absolute inset-2 z-10 rounded-[1.45rem] sm:inset-2.5 sm:rounded-[1.9rem]"
+              style={{ border: "1px solid color-mix(in srgb, var(--color-welcome-gold) 38%, transparent)" }}
+              aria-hidden
+            />
             <motion.ul
-              className="relative z-20 space-y-2 px-4 py-5 sm:space-y-2.5 sm:px-6 sm:py-7 md:px-8"
+              className="relative z-20 space-y-2 px-4 py-8 sm:space-y-2.5 sm:px-6 sm:py-10 md:px-8"
               variants={listVariants}
               initial={initial}
               whileInView="show"
@@ -393,6 +458,7 @@ export function FAQ() {
               })}
             </motion.ul>
           </motion.div>
+          </div>
 
         </div>
       </section>

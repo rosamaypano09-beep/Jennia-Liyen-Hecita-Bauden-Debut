@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo, type ReactNode } from "react"
 import { motion, type Variants } from "motion/react"
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion"
 import localFont from "next/font/local"
+import Image from "next/image"
 import {
   Instagram,
   Facebook,
@@ -297,6 +298,7 @@ export function Footer() {
       ].filter((row) => row.place || row.times.length > 0)
 
   const initial = reduceMotion ? false : "hidden"
+  const corners = content.corners ?? siteConfig.loadingScreen?.gala?.corners
 
   return (
     <div
@@ -306,6 +308,31 @@ export function Footer() {
       {/* Red circle pattern (colors: components/sections/love-story-red.css) */}
       <PlainBubbles />
       <RisingMotes count={30} />
+      {/* Mask & rose corner pieces on the section */}
+      {corners && (
+        <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
 
       <footer className="relative z-20 pt-14 pb-10 sm:pt-16 sm:pb-12 md:pt-20 md:pb-14">
         {/* Header: monogram + celebrant */}
