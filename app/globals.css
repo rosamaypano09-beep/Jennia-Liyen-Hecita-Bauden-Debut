@@ -110,8 +110,9 @@
   --deco-filter: grayscale(1) sepia(1) saturate(2.1) hue-rotate(-6deg) brightness(0.86) contrast(1.08);
 
   /* Moving "Silk" backdrop behind the main sections (WebGL — any CSS color).
-     Read at runtime by components/invitation-page.tsx. Deep wine velvet. */
-  --color-silk: #3A0B12;
+     Read at runtime by components/invitation-page.tsx. Black luxury satin
+     (kept slightly lifted from pure black so the folds catch light). */
+  --color-silk: #0D0D0D;
 
   /* QR codes (every QR on the site + dashboard): darkest motif color on white.
      Read at runtime by hooks/use-css-color, so any CSS color works here. */

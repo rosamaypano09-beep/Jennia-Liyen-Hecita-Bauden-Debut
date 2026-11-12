@@ -296,7 +296,7 @@ const BRAND = {
 // The /gallery page reads every file in /public/gallery.
 // Every photo file by its number (add new ones here as Lilay's photos come in).
 const PHOTO_FILES: Record<number, string> = Object.fromEntries(
-  Array.from({ length: 12 }, (_, i) => [i + 1, `debut (${i + 1}).webp`]),
+  Array.from({ length: 17 }, (_, i) => [i + 1, `debut (${i + 1}).webp`]),
 )
 // Photo numbers that should never be shown on the invitation (loader, hero, etc.).
 // The /gallery page shows every file in /public/gallery.
@@ -497,6 +497,8 @@ export const siteConfig = {
     },
     // Sliding background photos (display: "photos"); files live in /public
     backgroundPhotos: CELEBRANT_PHOTOS,
+    // Photo marquee behind the loading screen poster only (falls back to backgroundPhotos if empty)
+    loaderPhotos: [17, 16, 15, 14, 13, 12, 11, 10].map(PHOTO).filter(Boolean),
     // Poster corners: small caps at the very top (left sits beside the monogram). "" hides one.
     topLeft: "The Debut",
     topRight: VENUE.name,
@@ -591,7 +593,7 @@ export const siteConfig = {
         title: "Little Masks",
         theme: "dark" as const,
         layout: "image-right" as const,
-        image: PHOTO(2),
+        image: PHOTO(17),
         paragraphs: [
           "As a child, I wore a hundred different faces: princess, dreamer, explorer, storyteller. Every game of pretend was a small rehearsal for the person I would one day become.",
         ],
@@ -600,7 +602,7 @@ export const siteConfig = {
         title: "Home & Hearth",
         theme: "light" as const,
         layout: "image-left" as const,
-        image: PHOTO(3),
+        image: PHOTO(16),
         paragraphs: [
           "Long before I knew what a ballroom was, I knew what home felt like — warm meals, familiar voices, and the people who loved me exactly as I was. They are the foundation of every chapter that followed.",
         ],
@@ -609,7 +611,7 @@ export const siteConfig = {
         title: "Lessons in Grace",
         theme: "dark" as const,
         layout: "image-right" as const,
-        image: PHOTO(4),
+        image: PHOTO(15),
         paragraphs: [
           "School taught me more than lessons on paper. It taught me patience, courage, and how to stand back up with grace whenever I stumbled.",
         ],
@@ -645,7 +647,7 @@ export const siteConfig = {
         title: "Faith in the Unseen",
         theme: "dark" as const,
         layout: "image-right" as const,
-        image: PHOTO(8),
+        image: PHOTO(13),
         paragraphs: [
           "Through every turn, I was never alone. Prayers whispered by the people who love me, and grace I could not always see, carried me further than I could have gone on my own.",
         ],
@@ -654,7 +656,7 @@ export const siteConfig = {
         title: "Rouge & Noir",
         theme: "light" as const,
         layout: "image-left" as const,
-        image: PHOTO(9),
+        image: PHOTO(14),
         paragraphs: [
           "I grew into my own colors — a little bold, a little mysterious, and entirely mine. Like red against black, I learned that strength and softness can belong to the same story.",
         ],

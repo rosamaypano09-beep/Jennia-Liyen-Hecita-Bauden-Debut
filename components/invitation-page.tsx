@@ -88,7 +88,7 @@ const sectionsRevealVariants = {
 }
 
 /** WebGL Silk needs a hex color — read from --color-silk in app/globals.css. */
-const SILK_FALLBACK = "#2B0A10"
+const SILK_FALLBACK = "#0D0D0D"
 
 function rgbToHex(rgb: string) {
   const parts = rgb.match(/\d+/g)

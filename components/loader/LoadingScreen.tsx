@@ -101,7 +101,12 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
   const fill = (text: string) => fillCelebrant(text, siteConfig);
   // Keyed by the photo list's contents, not its reference, so the same photos arriving
   // in the remote config don't reshuffle the marquee
-  const photosKey = (content.backgroundPhotos ?? []).join('\n');
+  const loaderPhotos = content.loaderPhotos?.length
+    ? content.loaderPhotos
+    : defaultSiteConfig.loadingScreen.loaderPhotos?.length
+      ? defaultSiteConfig.loadingScreen.loaderPhotos
+      : content.backgroundPhotos ?? [];
+  const photosKey = loaderPhotos.join('\n');
   const backgroundPhotos = useMemo(
     () => (photosKey ? photosKey.split('\n').map((src) => encodeURI(src)) : []),
     [photosKey],
