@@ -3710,3 +3710,132 @@
     0 0 14px color-mix(in srgb, var(--color-welcome-gold) 35%, transparent);
   filter: none;
 }
+
+/* ==========================================================================
+   Masquerade dressing (photos mode) — matches the loading screen:
+   oxblood-black velvet tint, candle glows, gilded double frame, mask & rose
+   corner pieces, and a Victorian gold damask lining inside the envelope.
+   ========================================================================== */
+.env-invite-screen:not(.env-invite-screen--plain) {
+  --env-corner: clamp(96px, 27vw, 250px);
+}
+
+/* Velvet tint over the photo marquee: burgundy multiply + dark candlelit edges */
+.env-invite-screen:not(.env-invite-screen--plain) .env-invite-readability-scrim {
+  background:
+    radial-gradient(ellipse 62% 46% at 50% 44%, rgba(150, 22, 38, 0.3) 0%, transparent 72%),
+    radial-gradient(ellipse 120% 90% at 50% 44%, rgba(70, 4, 14, 0.25) 0%, rgba(36, 2, 7, 0.5) 58%, rgba(12, 0, 3, 0.86) 100%),
+    linear-gradient(to bottom, rgba(14, 0, 3, 0.55) 0%, transparent 22%, transparent 58%, rgba(14, 0, 3, 0.85) 100%);
+}
+.env-invite-screen:not(.env-invite-screen--plain) .env-invite-readability-scrim::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #9a1a2a;
+  mix-blend-mode: multiply;
+  opacity: 0.66;
+}
+
+/* Candle glows high in the corners */
+.env-invite-candle {
+  position: fixed;
+  z-index: 1;
+  top: -8%;
+  width: min(70vw, 520px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 196, 120, 0.22) 0%, rgba(230, 140, 70, 0.08) 35%, transparent 65%);
+  mix-blend-mode: screen;
+  animation: env-candle-flicker 3.2s ease-in-out infinite alternate;
+}
+.env-invite-candle--left {
+  left: -22%;
+}
+.env-invite-candle--right {
+  right: -22%;
+  animation-delay: -1.6s;
+  animation-duration: 2.7s;
+}
+@keyframes env-candle-flicker {
+  0% { opacity: 0.75; transform: scale(1); }
+  40% { opacity: 1; }
+  70% { opacity: 0.85; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(0.98); }
+}
+
+/* Gilded double frame */
+.env-invite-gilt-frame {
+  position: fixed;
+  z-index: 1;
+  inset: clamp(8px, 2.2vw, 20px);
+  pointer-events: none;
+  border: 1px solid rgba(212, 169, 87, 0.62);
+  box-shadow:
+    0 0 0 1px rgba(20, 0, 4, 0.6),
+    0 0 18px rgba(212, 169, 87, 0.18),
+    inset 0 0 26px rgba(212, 169, 87, 0.12);
+}
+.env-invite-gilt-frame::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(212, 169, 87, 0.3);
+}
+
+/* Mask & rose corner pieces (behind the envelope, stage is z 2) */
+.env-invite-gilt-corners {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.env-invite-gilt-corner {
+  position: absolute;
+  width: var(--env-corner);
+  height: auto;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
+}
+.env-invite-gilt-corner--tl {
+  top: max(env(safe-area-inset-top), -4px);
+  left: -6px;
+}
+.env-invite-gilt-corner--tr {
+  top: max(env(safe-area-inset-top), -4px);
+  right: -6px;
+}
+.env-invite-gilt-corner--bl,
+.env-invite-gilt-corner--br {
+  width: calc(var(--env-corner) * 1.05);
+  bottom: max(env(safe-area-inset-bottom), -4px);
+}
+.env-invite-gilt-corner--bl {
+  left: -6px;
+}
+.env-invite-gilt-corner--br {
+  right: -6px;
+}
+.env-invite-screen[data-phase="exiting"] .env-invite-gilt-corners,
+.env-invite-screen[data-phase="exiting"] .env-invite-gilt-frame,
+.env-invite-screen[data-phase="exiting"] .env-invite-candle {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+/* Deeper oxblood envelope + Victorian gold damask lining (replaces the lattice) */
+.env-invite-envelope {
+  --env-highlight: #7c1426;
+  --env-base: #620e1c;
+  --env-fold: #4b0915;
+  --env-shadow: #350610;
+  --env-envelope: #620e1c;
+  --env-gold: #d4a957;
+  --env-damask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'><g fill='none' stroke='%23d4a957' stroke-width='0.7' stroke-opacity='0.4'><path d='M24 0 L48 32 L24 64 L0 32 Z'/></g><g fill='%23d4a957' fill-opacity='0.78'><path d='M24 15c-3.4 4.2-3.6 8.6 0 14 3.6-5.4 3.4-9.8 0-14z'/><path d='M24 49c-3.4-4.2-3.6-8.6 0-14 3.6 5.4 3.4 9.8 0 14z'/><path d='M22 32c-3-3.2-7.4-3.6-10.4-0.6 3.2 2.6 7 2.8 10.4 0.6z'/><path d='M26 32c3-3.2 7.4-3.6 10.4-0.6-3.2 2.6-7 2.8-10.4 0.6z'/><circle cx='24' cy='32' r='1.6'/><circle cx='24' cy='0' r='1.3'/><circle cx='24' cy='64' r='1.3'/><circle cx='0' cy='32' r='1.3'/><circle cx='48' cy='32' r='1.3'/></g><g fill='none' stroke='%23d4a957' stroke-width='0.8' stroke-opacity='0.6'><path d='M16 22c-2.6-1-3.6-3.4-2-5.4M32 22c2.6-1 3.6-3.4 2-5.4M16 42c-2.6 1-3.6 3.4-2 5.4M32 42c2.6 1 3.6 3.4 2 5.4'/></g></svg>");
+  --env-liner:
+    var(--env-damask) 0 0 / 34px 45px,
+    radial-gradient(ellipse at 50% 30%, #4a0611 0%, #1f0106 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .env-invite-candle {
+    animation: none;
+  }
+}

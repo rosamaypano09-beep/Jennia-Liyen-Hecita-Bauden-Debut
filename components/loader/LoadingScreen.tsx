@@ -124,6 +124,10 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
   const elapsedRef = useRef(0);
 
   const name = fill(gala.title);
+  const corners = gala.corners ?? defaultSiteConfig.loadingScreen.gala.corners;
+  const ceremony = siteConfig.ceremony ?? defaultSiteConfig.ceremony;
+  const dateLine = [ceremony?.date, ceremony?.guestsTime].filter(Boolean).join('  ·  ');
+  const venueLine = ceremony?.location ?? '';
   const ghostText = (gala.ghostText ?? []).map((t) => fill(t)).filter(Boolean).join('  ·  ');
 
   useEffect(() => {
@@ -269,8 +273,37 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
         <div className="gala-bg__bloom gala-bg__bloom--left" />
         <div className="gala-bg__bloom gala-bg__bloom--right" />
         <div className="gala-bg__spot" />
+        <div className="gala-bg__candle gala-bg__candle--left" />
+        <div className="gala-bg__candle gala-bg__candle--right" />
         <div className="gala-bg__vignette" />
       </div>
+      {/* Gilded double frame with mask & rose corner pieces */}
+      <div className="gala-frame" aria-hidden="true" />
+      {corners && (
+        <div className="gala-corners" aria-hidden="true">
+          {(
+            [
+              ['topLeft', 'tl'],
+              ['topRight', 'tr'],
+              ['bottomLeft', 'bl'],
+              ['bottomRight', 'br'],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                priority
+                sizes="(max-width: 559px) 30vw, 260px"
+                className={`gala-corner gala-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
       {/* Ghost lettering drifting down the left edge and up the right */}
       <GhostMarquee
         text={ghostText}
@@ -300,6 +333,15 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
 
       <div className="gala">
         <header className="gala__head">
+          {/* Venetian mask crest */}
+          <svg className="gala__crest" viewBox="0 0 64 28" aria-hidden="true">
+            <path
+              fill="currentColor"
+              fillRule="evenodd"
+              d="M32 9.5C26 3.5 14 2.5 4.5 6.5 2.5 7.4 1.6 9.4 2.3 11.4 4.4 19.5 10.4 25 18.2 25c5.6 0 9.6-3.4 13.8-7.2 4.2 3.8 8.2 7.2 13.8 7.2 7.8 0 13.8-5.5 15.9-13.6.7-2-.2-4-2.2-4.9C50 2.5 38 3.5 32 9.5ZM10 12.4c3.2-3.4 10-3.6 14 .4-3 3.4-10 4.4-14-.4Zm44 0c-3.2-3.4-10-3.6-14 .4 3 3.4 10 4.4 14-.4Z"
+            />
+            <path fill="currentColor" d="M32 8.6 29.6 4.2 32 .8l2.4 3.4Z" />
+          </svg>
           {gala.eyebrow && (
             <p className="gala__eyebrow">
               {gala.eyebrow}
@@ -379,6 +421,12 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
           {gala.subtitle && (
             <p className="gala__fullname">
               <span className="gala-gold">{fill(gala.subtitle)}</span>
+            </p>
+          )}
+          {gala.showDetails !== false && (dateLine || venueLine) && (
+            <p className="gala__details">
+              {dateLine && <span className="gala__details-date">{dateLine}</span>}
+              {venueLine && <span className="gala__details-venue">{venueLine}</span>}
             </p>
           )}
           <GoldRule />

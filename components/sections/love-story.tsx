@@ -172,6 +172,7 @@ export function LoveStory() {
           eucalyptusDecos={isPlain ? eucalyptusDecos : undefined}
           chapterLabelText={loveStory.chapterLabel}
           surface={isPlain ? "solid" : "pattern"}
+          photoCorners={isPlain ? undefined : loveStory.photoCorners}
         />
       ))}
 
@@ -191,13 +192,13 @@ export function LoveStory() {
               className={`font-goudy-italic ${sectionType.textRelaxed} italic leading-relaxed`}
               style={{ color: WHITE, textShadow: onBgGlow }}
             >
-              &ldquo;{loveStory.closingQuote}&rdquo;
+              &ldquo;{formatStoryParagraph(loveStory.closingQuote, celebrant)}&rdquo;
             </p>
             <footer
               className={`font-goudy-italic mt-2 sm:mt-3 ${sectionType.label} not-italic tracking-wide`}
               style={{ color: GOLD, textShadow: onBgGlow }}
             >
-              — {loveStory.closingCitation}
+              — {formatStoryParagraph(loveStory.closingCitation, celebrant)}
             </footer>
           </blockquote>
           {isPlain && eucalyptusDecos.sectionBottom ? (

@@ -53,6 +53,9 @@ interface StorySectionProps {
   // "pattern": no solid band — the section's circle pattern shows through and the
   // text sits on an ivory (light) or wine-glass (dark) card (see love-story-red.css)
   surface?: "solid" | "pattern"
+  // Ornate corner pieces on the photo. Alternates per chapter: odd chapters get
+  // top-left + bottom-right, even chapters top-right + bottom-left ("" hides one)
+  photoCorners?: { topLeft: string; topRight: string; bottomLeft: string; bottomRight: string }
 }
 
 // The Seasons (title face) lacks most punctuation — set any non-letter/number
@@ -128,7 +131,20 @@ export const StorySection: React.FC<StorySectionProps> = ({
   eucalyptusDecos,
   chapterLabelText = "Chapter",
   surface = "solid",
+  photoCorners,
 }) => {
+  // Which pair of corners this chapter's photo wears (alternates chapter to chapter)
+  const cornerPair = photoCorners
+    ? chapterIndex % 2 === 0
+      ? ([
+          ["tl", photoCorners.topLeft],
+          ["br", photoCorners.bottomRight],
+        ] as const)
+      : ([
+          ["tr", photoCorners.topRight],
+          ["bl", photoCorners.bottomLeft],
+        ] as const)
+    : []
   const onPattern = surface === "pattern"
   const isDark = theme === "dark"
   const textCardClass = onPattern
@@ -262,6 +278,20 @@ export const StorySection: React.FC<StorySectionProps> = ({
                     )}
                   </div>
                 </div>
+                {cornerPair.map(([pos, src]) =>
+                  src ? (
+                    <Image
+                      key={pos}
+                      src={src}
+                      alt=""
+                      aria-hidden
+                      width={600}
+                      height={600}
+                      sizes="(max-width: 768px) 24vw, 200px"
+                      className={`story-photo-corner story-photo-corner--${pos}`}
+                    />
+                  ) : null,
+                )}
               </motion.div>
             </div>
           )}

@@ -74,6 +74,36 @@ const softPanelStyle = {
 } as const
 
 
+type Corners = { topLeft: string; topRight: string; bottomLeft: string; bottomRight: string }
+
+// Mask & rose pieces hanging off two opposite corners of a card
+// "main" = top-left + bottom-right, "alt" = top-right + bottom-left
+function CardCorners({ corners, pair }: { corners?: Corners; pair: "main" | "alt" }) {
+  if (!corners) return null
+  const pieces =
+    pair === "main"
+      ? ([["tl", corners.topLeft], ["br", corners.bottomRight]] as const)
+      : ([["tr", corners.topRight], ["bl", corners.bottomLeft]] as const)
+  return (
+    <>
+      {pieces.map(([pos, src]) =>
+        src ? (
+          <Image
+            key={pos}
+            src={src}
+            alt=""
+            aria-hidden
+            width={600}
+            height={600}
+            sizes="(max-width: 640px) 34vw, 220px"
+            className={`details-card-corner details-card-corner--${pos}`}
+          />
+        ) : null,
+      )}
+    </>
+  )
+}
+
 function SectionIconDivider({ icon }: { icon: ReactNode }) {
   return (
     <div className="flex items-center justify-center gap-2 pt-1 sm:pt-2">
@@ -418,15 +448,18 @@ function AttireCard({
   alt,
   children,
   belowImage,
+  corners,
 }: {
   title: string
   image?: string
   alt: string
   children: ReactNode
   belowImage?: ReactNode
+  corners?: Corners
 }) {
   return (
     <div className="relative group h-full">
+      <CardCorners corners={corners} pair="alt" />
       <div
         className="absolute -inset-1 rounded-2xl opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100"
         style={{
@@ -523,6 +556,7 @@ type EventVenueCardProps = {
   labels: VenueLabels
   /** Shown on a gold-on-black panel when there are no venue photos */
   monogram?: string
+  corners?: Corners
 }
 
 function EventVenueCard({
@@ -546,6 +580,7 @@ function EventVenueCard({
   showDateDetails = true,
   labels,
   monogram,
+  corners,
 }: EventVenueCardProps) {
   const { fg: qrFg, bg: qrBg } = useQrColors() // --color-qr-fg / --color-qr-bg in globals.css
   const eventDate = showDateDetails ? new Date(dateString) : null
@@ -553,6 +588,7 @@ function EventVenueCard({
 
   return (
     <div className="relative group">
+      <CardCorners corners={corners} pair="main" />
       <div
         className="absolute -inset-1 rounded-2xl opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100"
         style={{
@@ -786,6 +822,7 @@ export function Details() {
   const siteConfig = useSiteConfig()
   const content = siteConfig.eventDetails
   const { venues, labels, attire, reminders } = content
+  const corners: Corners | undefined = content.corners ?? siteConfig.loadingScreen?.gala?.corners
   const { ceremony, reception } = siteConfig
 
   const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set())
@@ -866,6 +903,31 @@ export function Details() {
       {/* Red circle pattern (colors: components/sections/love-story-red.css) */}
       <PlainBubbles />
       <RisingMotes count={40} />
+      {/* Mask & rose corner pieces on the section */}
+      {corners && (
+        <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
       {/* Ghost lettering down the left edge and up the right — this section is tall,
           so each column carries more copies of the line */}
       <GhostMarquee
@@ -925,6 +987,7 @@ export function Details() {
               venueSectionLabel={venues.combined.sectionLabel}
               mapsLink={ceremony.map}
               monogram={siteConfig.celebrant?.monogram}
+              corners={corners}
               copyId="combined"
               fullVenue={ceremonyVenue}
               copiedItems={copiedItems}
@@ -949,6 +1012,7 @@ export function Details() {
               venueSectionLabel={venues.ceremony.sectionLabel}
               mapsLink={ceremony.map}
               monogram={siteConfig.celebrant?.monogram}
+              corners={corners}
               copyId="ceremony"
               fullVenue={ceremonyVenue}
               copiedItems={copiedItems}
@@ -972,6 +1036,7 @@ export function Details() {
               arrivalTime={venues.reception.showArrival ? ceremony.guestsTime : undefined}
               venueSectionLabel={venues.reception.sectionLabel}
               mapsLink={receptionMapsLink}
+              corners={corners}
               copyId="reception"
               fullVenue={receptionVenue}
               copiedItems={copiedItems}
@@ -1011,6 +1076,7 @@ export function Details() {
                   title={group.title}
                   image={group.image}
                   alt={group.title ? `${group.title} attire guide` : "Dress code guide"}
+                  corners={corners}
                   belowImage={
                     hasPalette ? (
                       <DressCodePaletteHeader

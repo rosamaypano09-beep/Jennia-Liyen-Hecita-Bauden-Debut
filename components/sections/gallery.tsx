@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { createPortal } from "react-dom"
 import Image from "next/image"
-import Link from "next/link"
 import localFont from "next/font/local"
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react"
 import { cinzel } from "@/lib/fonts"
 import { Section } from "@/components/section"
 import { sectionType } from "@/lib/section-typography"
 import { useSiteConfig } from "@/hooks/use-site-config"
+import { siteConfig as defaultSiteConfig } from "@/content/site"
 import { PlainBubbles } from "@/components/loader/PlainBubbles"
 import { RisingMotes } from "@/components/rising-motes"
 import "@/components/loader/loading-screen.css"
@@ -57,11 +57,6 @@ const lineLeft = {
 // Photos sit bare on the pattern — no mat, border or inner line; just a soft drop shadow
 const frameStyle: React.CSSProperties = {
   boxShadow: "0 16px 32px -14px color-mix(in srgb, var(--color-coastal-deep) 70%, transparent)",
-}
-
-const badgeStyle: React.CSSProperties = {
-  backgroundColor: "color-mix(in srgb, var(--color-coastal-deep) 60%, transparent)",
-  color: C.light,
 }
 
 function DiamondDivider({ children }: { children?: React.ReactNode }) {
@@ -117,8 +112,39 @@ function GalleryTitle({ title, subtitle }: { title: string; subtitle: string }) 
 
 type GalleryItem = { image: string; text: string }
 
+const pad2 = (n: number) => String(n).padStart(2, "0")
+
+// Card number: gold "01" over a short rule and the total, in a velvet chip
+function CountBadge({ index, total, className = "" }: { index: number; total: number; className?: string }) {
+  return (
+    <span
+      className={`${cinzel.className} pointer-events-none inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 backdrop-blur-sm ${className}`}
+      style={{
+        background: "linear-gradient(180deg, rgba(48, 3, 12, 0.78), rgba(18, 0, 5, 0.82))",
+        borderColor: "color-mix(in srgb, var(--color-welcome-gold) 60%, transparent)",
+        boxShadow: "inset 0 0 0 2px rgba(18, 0, 5, 0.55), inset 0 0 0 3px rgba(212, 169, 87, 0.18)",
+      }}
+      aria-hidden
+    >
+      <span className="text-[0.95rem] font-semibold leading-none tabular-nums" style={{ color: "#f1d79a" }}>
+        {pad2(index + 1)}
+      </span>
+      <span className="h-px w-3" style={{ background: "var(--color-welcome-gold)" }} />
+      <span className="text-[0.6rem] font-semibold leading-none tabular-nums tracking-[0.08em]" style={{ color: "rgba(246, 233, 210, 0.8)" }}>
+        {pad2(total)}
+      </span>
+    </span>
+  )
+}
+
 export function Gallery() {
-  const { gallery } = useSiteConfig()
+  const siteConfig = useSiteConfig()
+  const { gallery } = siteConfig
+  // Section corners: gallery.corners, else the loader's mask & rose set
+  const corners =
+    gallery.corners ??
+    siteConfig.loadingScreen?.gala?.corners ??
+    defaultSiteConfig.loadingScreen.gala.corners
   const galleryItems: GalleryItem[] = gallery.images
   // Desktop mosaic: 1 featured (fills 4 cells) + 8 tiles = 12 cells → whole rows at 3 or 4 columns
   const DESKTOP_TILES = 9
@@ -138,6 +164,16 @@ export function Gallery() {
   const [lastTap, setLastTap] = useState(0)
   const [panStart, setPanStart] = useState<{ x: number; y: number; panX: number; panY: number } | null>(null)
   const pointerStart = useRef({ x: 0, y: 0, dragging: false })
+  // Mobile carousel: which card is centered (drives the counter + progress line)
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const [activeSlide, setActiveSlide] = useState(0)
+  const handleCarouselScroll = useCallback(() => {
+    const el = carouselRef.current
+    const first = el?.firstElementChild as HTMLElement | null
+    if (!el || !first) return
+    const step = first.offsetWidth + 12 // card + gap-3
+    setActiveSlide(Math.max(0, Math.min(galleryItems.length - 1, Math.round(el.scrollLeft / step))))
+  }, [galleryItems.length])
   const swipeConsumed = useRef(false)
 
   const resetZoom = useCallback(() => {
@@ -239,6 +275,31 @@ export function Gallery() {
       {/* Red circle pattern, softly blurred, with gold dust rising behind the photos */}
       <PlainBubbles />
       <RisingMotes count={36} />
+      {/* Mask & rose corner pieces */}
+      {corners && (
+        <div className="gallery-corners pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
       <Section
         id="gallery"
         className="relative z-10 overflow-hidden pt-14 pb-10 sm:pt-16 sm:pb-12 md:pt-20 md:pb-16 lg:pt-24 lg:pb-20"
@@ -298,6 +359,8 @@ export function Gallery() {
                 and the neighbours peek in on both sides. */}
             <div className="sm:hidden">
               <div
+                ref={carouselRef}
+                onScroll={handleCarouselScroll}
                 className="-mx-6 flex gap-3 overflow-x-auto px-[11%] pt-2 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 aria-label="Gallery carousel"
               >
@@ -322,17 +385,44 @@ export function Gallery() {
                       />
                     </div>
 
-                    <div className="absolute top-2 right-2 rounded-full px-2 py-0.5 backdrop-blur-sm" style={badgeStyle}>
-                      <span className="text-[11px] font-medium tracking-wider">
-                        {index + 1}/{galleryItems.length}
-                      </span>
-                    </div>
+                    <CountBadge index={index} total={galleryItems.length} className="absolute bottom-2.5 left-2.5" />
                   </button>
                 ))}
               </div>
 
+              {/* Live counter: 03 ──────── 12, the line fills as you swipe */}
+              <div className="mx-auto mt-1 flex w-[78%] items-center gap-3" aria-live="polite">
+                <span
+                  className={`${cinzel.className} text-lg font-semibold leading-none tabular-nums`}
+                  style={{ color: "#f1d79a", textShadow: textLift }}
+                >
+                  {pad2(activeSlide + 1)}
+                  <span className="sr-only"> of {galleryItems.length}</span>
+                </span>
+                <span
+                  className="relative h-px flex-1 overflow-hidden"
+                  style={{ background: "color-mix(in srgb, var(--color-welcome-gold) 28%, transparent)" }}
+                  aria-hidden
+                >
+                  <span
+                    className="absolute inset-y-0 left-0 transition-[width] duration-300 ease-out"
+                    style={{
+                      width: `${((activeSlide + 1) / galleryItems.length) * 100}%`,
+                      background: "linear-gradient(90deg, var(--color-welcome-gold), #fff1c4)",
+                      boxShadow: "0 0 6px rgba(243, 220, 159, 0.7)",
+                    }}
+                  />
+                </span>
+                <span
+                  className={`${cinzel.className} text-xs font-semibold leading-none tabular-nums`}
+                  style={{ color: "rgba(246, 233, 210, 0.8)", textShadow: textLift }}
+                  aria-hidden
+                >
+                  {pad2(galleryItems.length)}
+                </span>
+              </div>
               <p
-                className={`${cinzel.className} mt-1 text-center tracking-[0.2em] uppercase ${sectionType.label}`}
+                className={`${cinzel.className} mt-2.5 text-center tracking-[0.2em] uppercase ${sectionType.label}`}
                 style={{ color: C.eyebrow, textShadow: textLift }}
               >
                 Swipe to explore
@@ -402,37 +492,20 @@ export function Gallery() {
                     </div>
 
                     {!isMoreTile && (
-                      <div
-                        className="absolute top-2.5 right-2.5 rounded-full px-2 py-0.5 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
-                        style={badgeStyle}
-                      >
-                        <span className="text-[11px] font-medium tracking-wider">
-                          {index + 1}/{galleryItems.length}
-                        </span>
-                      </div>
+                      <CountBadge
+                        index={index}
+                        total={galleryItems.length}
+                        className={`absolute left-3 ${featured ? "bottom-4 md:bottom-5" : "bottom-3"}`}
+                      />
                     )}
                   </button>
                 )
               })}
             </div>
 
-            <div className="mt-10 flex justify-center sm:mt-12 md:mt-14">
-              <Link
-                href={gallery.buttonHref}
-                className={`${cinzel.className} inline-flex items-center justify-center rounded-full border px-8 py-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] transition-all duration-300 hover:scale-[1.03] hover:brightness-110 active:scale-[0.98] sm:text-[0.6875rem] sm:tracking-[0.22em]`}
-                style={{
-                  background: "linear-gradient(180deg, var(--color-motif-accent) 0%, var(--color-motif-deep) 100%)",
-                  borderColor: "color-mix(in srgb, var(--color-welcome-gold) 70%, transparent)",
-                  color: "#fff",
-                  boxShadow: "0 12px 26px -10px color-mix(in srgb, var(--color-coastal-deep) 70%, transparent)",
-                }}
-              >
-                {gallery.buttonText}
-              </Link>
-            </div>
 
             <p
-              className={`font-goudy-italic mx-auto mt-6 max-w-lg px-2 text-center leading-relaxed sm:mt-8 ${sectionType.textRelaxed}`}
+              className={`font-goudy-italic mx-auto mt-8 max-w-lg px-2 text-center leading-relaxed sm:mt-10 ${sectionType.textRelaxed}`}
               style={{ color: C.soft, textShadow: textLift }}
             >
               {gallery.footnote}
@@ -518,8 +591,14 @@ export function Gallery() {
                   borderColor: "color-mix(in srgb, var(--color-motif-silver) 50%, transparent)",
                 }}
               >
-                <span className="text-sm font-medium sm:text-base" style={{ color: C.light }}>
-                  {currentIndex + 1} / {galleryItems.length}
+                <span className={`${cinzel.className} inline-flex items-center gap-2 tabular-nums`}>
+                  <span className="text-base font-semibold sm:text-lg" style={{ color: "#f1d79a" }}>
+                    {pad2(currentIndex + 1)}
+                  </span>
+                  <span className="h-px w-5" style={{ background: "var(--color-welcome-gold)" }} aria-hidden />
+                  <span className="text-xs font-semibold sm:text-sm" style={{ color: C.light }}>
+                    {pad2(galleryItems.length)}
+                  </span>
                 </span>
               </div>
               <button

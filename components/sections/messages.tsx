@@ -94,9 +94,9 @@ const cardStyle = {
     "0 30px 60px -28px color-mix(in srgb, var(--color-coastal-deep) 80%, transparent), inset 0 1px 0 rgb(255 255 255 / 80%)",
 } as const
 
-// Message wall is hidden: guests can still send messages (they go to the Google Form),
-// but the sent messages are not fetched or shown on the page. Set to true to show them again.
-const SHOW_MESSAGE_WALL = false
+// Message wall: sent messages (Google Form → sheet) are fetched from /api/messages and shown
+// below the form. Set to false to hide the wall (guests can still send messages).
+const SHOW_MESSAGE_WALL = true
 
 interface Message {
   timestamp: string

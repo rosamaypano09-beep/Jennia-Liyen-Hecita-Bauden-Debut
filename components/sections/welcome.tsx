@@ -168,14 +168,84 @@ export function Welcome() {
               <OrnamentalDivider compact />
             </header>
 
+            {/* Featured pull-quote: large italic between gold quote marks */}
+            {content.quote && (
+              <figure className="mx-auto max-w-[30rem] text-center">
+                <blockquote
+                  className="font-goudy-italic relative px-6 text-[1.08rem] leading-[1.5] sm:px-8 sm:text-[1.3rem] md:text-[1.45rem]"
+                  style={{ color: WELCOME_COLORS.wine }}
+                >
+                  <span
+                    aria-hidden
+                    className={`${theSeasons.className} absolute -left-0.5 -top-3 text-[2.6rem] leading-none sm:-top-4 sm:text-[3.4rem]`}
+                    style={{ color: WELCOME_COLORS.gold }}
+                  >
+                    &ldquo;
+                  </span>
+                  {fill(content.quote)}
+                  <span
+                    aria-hidden
+                    className={`${theSeasons.className} absolute -bottom-6 -right-0.5 text-[2.6rem] leading-none sm:-bottom-8 sm:text-[3.4rem]`}
+                    style={{ color: WELCOME_COLORS.gold }}
+                  >
+                    &rdquo;
+                  </span>
+                </blockquote>
+              </figure>
+            )}
+
             <div
               className={`font-goudy-italic mx-auto max-w-[36rem] space-y-3 text-center sm:space-y-3.5 md:space-y-4 ${sectionType.textRelaxed}`}
               style={{ color: WELCOME_COLORS.ink }}
             >
+              {content.greeting && (
+                <p
+                  className={`${cinzel.className} not-italic font-semibold uppercase tracking-[0.16em] ${sectionType.label}`}
+                  style={{ color: WELCOME_COLORS.gold }}
+                >
+                  {fill(content.greeting)}
+                </p>
+              )}
               {content.paragraphs.map((paragraph, index) => (
                 <p key={index}>{fill(paragraph)}</p>
               ))}
             </div>
+
+            {/* The evening at a glance: program moments separated by gold diamonds */}
+            {content.highlights && content.highlights.length > 0 && (
+              <div className="mx-auto w-full max-w-[36rem] text-center">
+                {content.highlightsTitle && (
+                  <p
+                    className={`${cinzel.className} mb-3 font-semibold uppercase tracking-[0.24em] ${sectionType.label}`}
+                    style={{ color: WELCOME_COLORS.gold }}
+                  >
+                    {content.highlightsTitle}
+                  </p>
+                )}
+                <ul
+                  className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 border-y py-3 sm:gap-x-3.5 sm:py-3.5"
+                  style={{ borderColor: WELCOME_COLORS.hairline }}
+                >
+                  {content.highlights.map((item, index) => (
+                    <li key={item} className="flex items-center gap-2.5 sm:gap-3.5">
+                      {index > 0 && (
+                        <span
+                          aria-hidden
+                          className="h-1 w-1 rotate-45 sm:h-1.5 sm:w-1.5"
+                          style={{ background: "var(--color-welcome-gold)" }}
+                        />
+                      )}
+                      <span
+                        className={`${cinzel.className} text-[0.66rem] font-semibold uppercase tracking-[0.12em] sm:text-[0.78rem] sm:tracking-[0.16em]`}
+                        style={{ color: WELCOME_COLORS.wine }}
+                      >
+                        {fill(item)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <footer className="space-y-2 border-t pt-8 text-center sm:space-y-2.5 sm:pt-9 md:pt-10"
               style={{

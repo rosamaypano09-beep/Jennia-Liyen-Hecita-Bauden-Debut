@@ -303,3 +303,302 @@
   margin-top: clamp(0.7rem, 3vw, 1.1rem);
   margin-bottom: clamp(0.3rem, 1.5vw, 0.6rem);
 }
+
+/* ==========================================================================
+   Masquerade hero — matches the loading screen + envelope:
+   oxblood velvet over the photos, candle glows, a gilded double frame, the
+   ornate mask crest above the invitation line, tagline + weekday/time/venue.
+   ========================================================================== */
+.home-hero--photos .home-hero-photo-scrim {
+  background:
+    radial-gradient(80% 50% at 50% 46%, rgba(22, 0, 6, 0.72) 0%, rgba(40, 2, 10, 0.5) 50%, transparent 100%),
+    radial-gradient(ellipse 120% 90% at 50% 44%, rgba(70, 4, 14, 0.25) 0%, rgba(36, 2, 7, 0.55) 58%, rgba(12, 0, 3, 0.88) 100%),
+    linear-gradient(to bottom, rgba(14, 0, 3, 0.7) 0%, transparent 24%, transparent 62%, rgba(14, 0, 3, 0.9) 100%);
+}
+.home-hero--photos .home-hero-photo-scrim::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #9a1a2a;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+
+/* Candle glows high in the corners */
+.home-hero-candle {
+  position: absolute;
+  z-index: 2;
+  top: -8%;
+  width: min(70vw, 560px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 196, 120, 0.2) 0%, rgba(230, 140, 70, 0.07) 35%, transparent 65%);
+  mix-blend-mode: screen;
+  animation: home-hero-flicker 3.2s ease-in-out infinite alternate;
+}
+.home-hero-candle--left {
+  left: -22%;
+}
+.home-hero-candle--right {
+  right: -22%;
+  animation-delay: -1.6s;
+  animation-duration: 2.7s;
+}
+@keyframes home-hero-flicker {
+  0% { opacity: 0.75; transform: scale(1); }
+  40% { opacity: 1; }
+  70% { opacity: 0.85; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(0.98); }
+}
+
+/* Gilded double frame (clears the fixed navbar at the top) */
+.home-hero-frame {
+  position: absolute;
+  z-index: 3;
+  inset: clamp(3.6rem, 9vw, 5rem) clamp(8px, 2.2vw, 20px) clamp(8px, 2.2vw, 20px);
+  pointer-events: none;
+  border: 1px solid rgba(212, 169, 87, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(20, 0, 4, 0.5),
+    0 0 18px rgba(212, 169, 87, 0.16),
+    inset 0 0 26px rgba(212, 169, 87, 0.1);
+}
+.home-hero-frame::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(212, 169, 87, 0.28);
+}
+
+/* Ornate mask crest — floats gently with a warm glow behind it */
+.home-hero-crest {
+  position: relative;
+  width: min(62vw, 440px, 30dvh * 1.39);
+  margin: 0 auto clamp(0.4rem, 2vw, 1rem);
+}
+.home-hero-crest__img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 18px rgba(212, 169, 87, 0.25));
+  animation: home-hero-crest-float 6s ease-in-out infinite alternate;
+}
+.home-hero-crest__glow {
+  position: absolute;
+  inset: 12% 8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 200, 130, 0.32) 0%, rgba(200, 60, 60, 0.12) 45%, transparent 72%);
+  filter: blur(8px);
+}
+@keyframes home-hero-crest-float {
+  from { transform: translateY(0) rotate(-1deg); }
+  to { transform: translateY(-6px) rotate(1deg); }
+}
+
+/* The crest now sits above the invitation line, so the line needs less top room */
+.home-hero .home-hero-kicker {
+  max-width: 21em;
+}
+
+/* Tagline: soft italic quote under the date */
+.home-hero-tagline {
+  max-width: 24em;
+  margin: clamp(0.8rem, 3vw, 1.2rem) auto 0;
+  font-family: var(--font-cormorant, "Cormorant Garamond"), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 4vw, 1.25rem);
+  line-height: 1.45;
+  text-wrap: balance;
+  color: #f6e9d2;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 2px 14px rgba(20, 0, 5, 0.85);
+}
+
+/* Weekday · time, venue below in gold */
+.home-hero .home-hero-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: clamp(0.7rem, 2.6vw, 1rem);
+  text-transform: uppercase;
+  color: #fff;
+}
+.home-hero-meta__venue {
+  font-size: 0.92em;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--color-welcome-gold) 70%, #fff6dc);
+}
+
+/* Short phones: keep everything above the countdown */
+@media (max-height: 720px) {
+  .home-hero-crest {
+    width: min(48vw, 300px);
+  }
+  .home-hero-tagline {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-candle,
+  .home-hero-crest__img {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   Responsive pass — every size follows BOTH the screen width and height
+   (min(vw, dvh)), so the whole stack + countdown fits on one screen from an
+   iPhone SE (375×667) up to desktop. Last in the file so it wins.
+   ========================================================================== */
+.home-hero-content {
+  padding: clamp(3.8rem, 10dvh, 7rem) clamp(1rem, 5vw, 2rem) clamp(0.5rem, 2.5dvh, 2.5rem);
+}
+
+/* Mask crest */
+.home-hero-crest {
+  width: clamp(140px, min(54vw, 20dvh * 1.39), 420px);
+  margin: 0 auto clamp(0.2rem, 1dvh, 0.8rem);
+}
+
+/* Invitation line: two balanced lines on phones */
+.home-hero .home-hero-kicker {
+  max-width: min(26em, 100%);
+  margin: 0 auto clamp(0.9rem, 4dvh, 2.6rem);
+  font-size: clamp(0.62rem, min(2.9vw, 1.7dvh), 0.95rem);
+  letter-spacing: 0.22em;
+  padding-left: 0.22em;
+  line-height: 1.65;
+}
+
+/* "Lilay": sized by width AND height so it never crowds the lines around it */
+.home-hero .home-hero-name {
+  margin: 0 auto;
+  padding: 0.16em 0.3em 0.1em;
+  font-size: clamp(3.8rem, min(26vw, 14.5dvh), 10.5rem);
+  line-height: 0.95;
+}
+
+/* Full name: sits clear of the swash, stays on one line on narrow phones */
+.home-hero .home-hero-fullname {
+  --track: 0.2em;
+  position: relative;
+  z-index: 1;
+  margin: clamp(0.25rem, 1.2dvh, 0.9rem) 0 0;
+  font-size: clamp(0.62rem, min(3.1vw, 1.9dvh), 1.15rem);
+}
+@media (max-width: 399px) {
+  .home-hero .home-hero-fullname::before,
+  .home-hero .home-hero-fullname::after {
+    width: 0.8rem;
+  }
+  .home-hero .home-hero-fullname {
+    gap: 0.5em;
+  }
+}
+
+.home-hero .home-hero-rule {
+  width: min(56%, 300px);
+  margin: clamp(0.5rem, 2dvh, 1.4rem) auto clamp(0.15rem, 0.8dvh, 0.6rem);
+}
+
+/* "turns eighteen" + date: a tight pair */
+.home-hero .home-hero-turns {
+  font-size: clamp(1.5rem, min(7.6vw, 4.4dvh), 3.2rem);
+}
+.home-hero .home-hero-date {
+  margin-top: clamp(0.15rem, 0.8dvh, 0.6rem);
+  font-size: clamp(1.5rem, min(7.6vw, 4.6dvh), 3.2rem);
+  letter-spacing: 0.08em;
+}
+
+.home-hero-tagline {
+  margin-top: clamp(0.5rem, 1.8dvh, 1.2rem);
+  font-size: clamp(0.92rem, min(3.9vw, 2.2dvh), 1.25rem);
+}
+
+.home-hero .home-hero-meta {
+  margin-top: clamp(0.4rem, 1.6dvh, 1rem);
+  font-size: clamp(0.6rem, min(2.8vw, 1.6dvh), 0.82rem);
+}
+
+/* ---- Countdown: four small gilded boxes ---- */
+.home-hero--photos .home-hero-countdown-bar {
+  background: linear-gradient(180deg, transparent 0%, rgba(20, 0, 5, 0.55) 35%, rgba(12, 0, 3, 0.9) 100%);
+}
+.home-hero-countdown {
+  padding: clamp(0.5rem, 1.6dvh, 1.2rem) 1rem calc(clamp(0.9rem, 2.6dvh, 1.8rem) + env(safe-area-inset-bottom));
+}
+.home-hero .home-hero-countdown-heading {
+  font-size: clamp(0.56rem, min(2.5vw, 1.5dvh), 0.74rem);
+  letter-spacing: 0.26em;
+  padding-left: 0.26em;
+  color: color-mix(in srgb, var(--color-welcome-gold) 60%, #fff6dc);
+}
+.home-hero-countdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.25rem, 1.5vw, 0.7rem);
+  margin: clamp(0.35rem, 1dvh, 0.75rem) auto 0;
+}
+.home-hero-countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: clamp(3.3rem, 15vw, 5.2rem);
+  padding: clamp(0.35rem, 1dvh, 0.65rem) 0.3rem clamp(0.3rem, 0.9dvh, 0.55rem);
+  border: 1px solid rgba(212, 169, 87, 0.55);
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(48, 3, 12, 0.7), rgba(18, 0, 5, 0.8));
+  box-shadow:
+    inset 0 0 0 3px rgba(18, 0, 5, 0.6),
+    inset 0 0 0 4px rgba(212, 169, 87, 0.2),
+    0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.home-hero .home-hero-countdown-unit .home-hero-countdown-value {
+  font-size: clamp(1.15rem, min(5.6vw, 3.4dvh), 1.9rem);
+  letter-spacing: 0.04em;
+  color: #f1d79a;
+}
+.home-hero .home-hero-countdown-unit .home-hero-countdown-label {
+  margin-top: 0.4em;
+  font-size: clamp(0.46rem, min(2vw, 1.2dvh), 0.62rem);
+  letter-spacing: 0.18em;
+  padding-left: 0.18em;
+  color: rgba(246, 233, 210, 0.82);
+}
+.home-hero .home-hero-countdown-colon {
+  font-size: clamp(1rem, min(4.5vw, 2.8dvh), 1.5rem);
+  color: rgba(212, 169, 87, 0.75);
+  text-shadow: 0 0 8px rgba(212, 169, 87, 0.35);
+}
+
+/* Short screens (iPhone SE, landscape tablets): drop the quote, keep the rest */
+@media (max-height: 740px) {
+  .home-hero-tagline {
+    display: none;
+  }
+}
+/* Very short (phones in landscape): crest off too; the section simply grows */
+@media (max-height: 520px) {
+  .home-hero-crest {
+    display: none;
+  }
+  .home-hero-content {
+    padding-top: 4rem;
+  }
+}
+/* Wide screens: a little more air around the crest and name */
+@media (min-width: 1024px) and (min-height: 760px) {
+  .home-hero-crest {
+    margin-bottom: 1rem;
+  }
+  .home-hero .home-hero-kicker {
+    letter-spacing: 0.28em;
+  }
+}

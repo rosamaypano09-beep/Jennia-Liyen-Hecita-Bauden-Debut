@@ -480,6 +480,39 @@ export const Hero: React.FC<HeroProps> = ({
 
       {!isPlain && <div className="env-invite-readability-scrim" aria-hidden="true" />}
 
+      {/* Masquerade dressing (same as the loading screen): candle glows, gilded frame, corners */}
+      {!isPlain && (
+        <>
+          <div className="env-invite-candle env-invite-candle--left" aria-hidden="true" />
+          <div className="env-invite-candle env-invite-candle--right" aria-hidden="true" />
+          <div className="env-invite-gilt-frame" aria-hidden="true" />
+          {gala.corners && (
+            <div className="env-invite-gilt-corners" aria-hidden="true">
+              {(
+                [
+                  ['topLeft', 'tl'],
+                  ['topRight', 'tr'],
+                  ['bottomLeft', 'bl'],
+                  ['bottomRight', 'br'],
+                ] as const
+              ).map(([key, pos]) =>
+                gala.corners?.[key] ? (
+                  <Image
+                    key={key}
+                    src={gala.corners[key]}
+                    alt=""
+                    width={600}
+                    height={600}
+                    sizes="(max-width: 559px) 30vw, 260px"
+                    className={`env-invite-gilt-corner env-invite-gilt-corner--${pos}`}
+                  />
+                ) : null,
+              )}
+            </div>
+          )}
+        </>
+      )}
+
       {!reduceMotion && (
         <div className="env-invite-particles pointer-events-none" aria-hidden="true">
           {RISING_MOTES.map((m, i) => (

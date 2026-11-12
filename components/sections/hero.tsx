@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
 import { motion } from "motion/react"
 import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion"
 import { cinzel } from "@/lib/fonts"
@@ -191,14 +192,14 @@ function CountdownUnit({
   const display = pad ? pad2(value) : String(value)
 
   return (
-    <div className="flex min-w-[3rem] flex-1 flex-col items-center sm:min-w-[3.5rem]">
+    <div className="home-hero-countdown-unit">
       <span
-        className={`${cinzel.className} home-hero-countdown-value text-[clamp(1.2rem,5.4vw,1.75rem)] font-semibold leading-none tabular-nums tracking-[0.04em]`}
+        className={`${cinzel.className} home-hero-countdown-value font-semibold leading-none tabular-nums`}
       >
         {display}
       </span>
       <span
-        className={`${cinzel.className} home-hero-countdown-label mt-1.5 text-[0.48rem] font-medium uppercase tracking-[0.16em] sm:mt-2 sm:text-[0.54rem]`}
+        className={`${cinzel.className} home-hero-countdown-label font-medium uppercase`}
       >
         {label}
       </span>
@@ -214,17 +215,17 @@ function HeroCountdown({
   labels: { days: string; hours: string; minutes: string; seconds: string }
 }) {
   const timeLeft = useCeremonyCountdown()
-  const colonClass = `${cinzel.className} home-hero-countdown-value shrink-0 self-start px-0.5 text-[clamp(1.2rem,5.4vw,1.75rem)] font-semibold leading-none tabular-nums sm:px-1`
+  const colonClass = `${cinzel.className} home-hero-countdown-colon shrink-0 font-semibold leading-none`
 
   return (
-    <div className="relative z-10 w-full px-4 py-4 sm:px-6 sm:py-5">
+    <div className="home-hero-countdown relative z-10 w-full">
       <p
-        className={`${cinzel.className} home-hero-countdown-heading text-center text-[0.58rem] font-semibold uppercase tracking-[0.22em] sm:text-[0.64rem] sm:tracking-[0.26em]`}
+        className={`${cinzel.className} home-hero-countdown-heading text-center font-semibold uppercase`}
       >
         {heading}
       </p>
       <div
-        className="mx-auto mt-2 flex max-w-md items-start justify-center sm:mt-2.5 sm:max-w-lg"
+        className="home-hero-countdown-row"
         aria-live="polite"
         aria-label={`${timeLeft.days} days, ${timeLeft.hours} hours, ${timeLeft.minutes} minutes, ${timeLeft.seconds} seconds`}
       >
@@ -328,6 +329,10 @@ export function Hero() {
             />
           </div>
           <div className="home-hero-photo-scrim pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
+          {/* Candlelight + gilded frame — same dressing as the loading screen */}
+          <div className="home-hero-candle home-hero-candle--left" aria-hidden="true" />
+          <div className="home-hero-candle home-hero-candle--right" aria-hidden="true" />
+          <div className="home-hero-frame" aria-hidden="true" />
         </>
       )}
 
@@ -341,7 +346,21 @@ export function Hero() {
 
       {!reduceMotion && <HeroMotes layer="back" />}
 
-      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 pb-[clamp(2.5rem,9dvh,5rem)] pt-[clamp(4.25rem,12vw,7rem)] text-center sm:px-8">
+      <div className="home-hero-content relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center text-center">
+        {hero.crestImage && (
+          <motion.div className="home-hero-crest" aria-hidden="true" {...fadeUp(0)}>
+            <span className="home-hero-crest__glow" />
+            <Image
+              src={encodeURI(hero.crestImage)}
+              alt=""
+              width={1421}
+              height={1024}
+              priority
+              sizes="(max-width: 639px) 62vw, 440px"
+              className="home-hero-crest__img"
+            />
+          </motion.div>
+        )}
         <motion.h1 className="relative mx-auto w-full max-w-full text-center" {...fadeUp(0.08)}>
           {hero.kicker && (
             <span
@@ -381,12 +400,26 @@ export function Hero() {
         )}
 
         <motion.p
-          className={`${theSeasons.className} home-hero-date text-[clamp(1.85rem,8.5vw,3.4rem)] font-normal leading-none tracking-[0.08em]`}
+          className={`${theSeasons.className} home-hero-date font-normal leading-none`}
           {...fadeUp(0.3)}
         >
           {numericDate}
         </motion.p>
 
+        {hero.tagline && (
+          <motion.p className="home-hero-tagline" {...fadeUp(0.36)}>
+            {fill(hero.tagline)}
+          </motion.p>
+        )}
+
+        {hero.showMeta !== false && (siteConfig.ceremony.location || siteConfig.ceremony.guestsTime) && (
+          <motion.p className={`${cinzel.className} home-hero-meta`} {...fadeUp(0.4)}>
+            {[siteConfig.ceremony.day, siteConfig.ceremony.guestsTime].filter(Boolean).join(" · ")}
+            {siteConfig.ceremony.location && (
+              <span className="home-hero-meta__venue">{siteConfig.ceremony.location}</span>
+            )}
+          </motion.p>
+        )}
       </div>
 
       <motion.div className="home-hero-countdown-bar relative z-10 mt-auto w-full" {...fadeUp(0.42)}>

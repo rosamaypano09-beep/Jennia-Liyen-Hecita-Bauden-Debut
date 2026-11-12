@@ -76,8 +76,8 @@ export type AttireColor = string | { name: string; hex: string }
 
 // ── The celebrant ───────────────────────────────────────────────────────────
 const CELEBRANT = {
-  fullName: "Antonia Beatriz Prieto", // Add surname only if provided
-  nickname: "Bea", // Used everywhere as {celebrant}
+  fullName: "Jennia Liyen Hecita Bauden",
+  nickname: "Lilay", // Used everywhere as {celebrant}
   age: "18",
   ageWords: "Eighteen",
   title: "Debutante",
@@ -86,9 +86,9 @@ const CELEBRANT = {
 // ── Event details (from the client brief) ───────────────────────────────────
 const EVENT = {
   type: "18th Birthday",
-  theme: "An Evening of Roses & Gold",
-  motif: "Red Roses, Black Elegance, Champagne Gold Accents",
-  colors: "Luxury Red, Deep Black, Champagne Gold, Soft Ivory",
+  theme: "The Mystery Unfolds",
+  motif: "Masquerade · Victorian",
+  colors: "Red, Black, Accents of Gold",
   themeSong: {
     title: "", // Add the celebrant's chosen theme song
     artist: "",
@@ -96,29 +96,28 @@ const EVENT = {
 }
 
 // ── Date & times ────────────────────────────────────────────────────────────
-const EVENT_DATE = "November 22, 2026"
-const EVENT_DAY = "Sunday"
+const EVENT_DATE = "November 27, 2026"
+const EVENT_DAY = "Friday"
 
 const TIMES = {
-  guestArrival: "5:00 PM", // Call time
-  program: "5:30 PM", // Program proper — countdown target
-  end: "", // Add confirmed event end time
+  guestArrival: "6:00 PM", // The Venetian Arrival
+  program: "6:30 PM", // The Grand Reveal Entrance — countdown target
+  end: "", // ⚠ check — last program item is 9:00 PM; add the confirmed end time
 }
 
 // ── Venue ───────────────────────────────────────────────────────────────────
 const VENUE = {
-  name: "Base Function Hall", // ⚠ check — replace once the family confirms the venue
-  address: "5th Floor, Base Building, Lacson St, Bacolod, Negros Occidental",
-  map: "https://maps.app.goo.gl/biRcxWoTHzBpAMTw8", // Google Maps pin (directions button + QR); "" hides the map QR and buttons
+  name: "Roy's Hotel and Convention Center",
+  address: "Araneta Ave, Bacolod, Negros Occidental, Philippines",
+  map: "https://maps.app.goo.gl/FgnJ5RqYsRHEoHqr6", // Google Maps pin (directions button + QR); "" hides the map QR and buttons
   // Step-by-step directions (FAQ) — add once the venue is confirmed
   directions: [] as string[],
   landmarks: [] as string[],
-  // Add confirmed venue photos when available ([] shows the gold monogram panel)
-  // Venue card slideshow (Event Details) — files in public/Details
+  // Venue card slideshow (Event Details) — files in public/Details ([] shows the gold monogram panel)
   photos: [
-    "/Details/venue (6).jpg",
-    "/Details/venue (7).jpg",
-    "/Details/venue (8).jpg",
+    "/Details/venue (1).jpg",
+    "/Details/venue (2).jpg",
+    "/Details/venue (3).jpg",
   ] as string[],
 }
 const CEREMONY_VENUE = VENUE
@@ -135,15 +134,15 @@ const RECEPTION_VENUE = VENUE
 const VENUE_CARDS = {
   layout: "combined" as "separate" | "combined",
   combined: {
-    badge: "The Debut",
+    badge: "The Masquerade",
     sectionLabel: "Venue",
     showDate: true,
     showArrival: true,
     // Time rows on the card, e.g. "Doors 7:00 PM | Program 7:30 PM"
-    ceremonyLabel: "Program",
+    ceremonyLabel: "Grand Reveal",
     receptionLabel: "Until",
-    // true = also show the end time on the card
-    showReceptionTime: true,
+    // true = also show the end time on the card (needs TIMES.end)
+    showReceptionTime: false,
   },
   ceremony: {
     show: true,
@@ -163,15 +162,15 @@ const VENUE_CARDS = {
 
 // ── RSVP & contact ──────────────────────────────────────────────────────────
 const RSVP = {
-  deadline: "", // Add confirmed RSVP deadline
-  coordinator: "Bea's Family",
+  deadline: "November 13, 2026",
+  coordinator: "Lilay's Family",
   phone: "0942 569 3287", // ⚠ check — carried over from the previous invitation
   alternatePhone: "0924 136 4683", // ⚠ check — carried over from the previous invitation
 }
 
 const HASHTAGS = [
-  "#BeaTurns18", // ⚠ check — confirm with the family
-  "#BeautifullyBea18",
+  "#LilayTurns18", // ⚠ check — confirm with the family
+  "#TheMysteryUnfolds",
 ]
 // ── Attire guide (Event Details → Attire Guidelines) ────────────────────────
 // SHOW = which cards to display AND their order, top to bottom. Examples:
@@ -185,7 +184,7 @@ const HASHTAGS = [
 //     label:     e.g. "Ladies", "Gentlemen" — leave "" to hide the heading (good for one inclusive blurb)
 //     details:   the dress code text ("" hides this half of the card)
 //     highlight: phrase inside details shown bold + underlined ("" for none)
-// Dress code: the evening's colors — burgundy, red, black, and gold (DRESS_PALETTE)
+// Dress code: Elegant Noir & Masquerade Venetian — all-black formal (DRESS_PALETTE)
 
 // Dress code: Black Formal — four shades of black. The attire card shows them
 // with names, the Dress Code reminder shows the same strip without names
@@ -206,13 +205,13 @@ const ATTIRE = {
     ladies: {
       label: "Ladies",
       details:
-        "Elegant formal gowns or cocktail dresses in burgundy, red, black, or gold.",
+        "Formal black long gowns or elegant black dresses.",
       highlight: "Formal Gowns",
     },
     gentlemen: {
       label: "Gentlemen",
       details:
-        "Formal black suits, tuxedos, or elegant barong with tailored slacks, with touches of burgundy, red, or gold.",
+        "Black suits or tuxedos.",
       highlight: "Formal Black Suits",
     },
   },
@@ -224,7 +223,7 @@ const ATTIRE = {
     ladies: {
       label: "Ladies",
       details:
-        "Elegant formal gowns or cocktail dresses in burgundy, red, black, or gold. Choose a polished, formal look.",
+        "Formal black long gowns or elegant black dresses.",
       highlight: "Formal Gowns",
     },
     gentlemen: {
@@ -236,28 +235,28 @@ const ATTIRE = {
   },
 
   guests: {
-    title: "", // no heading — this dress code is for everyone
-    image: "/Details/attireGuide.png",
+    title: "Elegant Noir & Masquerade Venetian",
+    image: "/Details/AttireGuide.png", // attire sample illustration
     palette: DRESS_PALETTE,
-    // One inclusive blurb (no Ladies / Gentlemen headings); \n starts a new line
     ladies: {
-      label: "",
+      label: "Ladies",
       details:
-        "Come in your most elegant best — sophisticated formal wear with timeless, modest styling.\n\n" +
-        "Please dress in black formal attire.",
-      highlight: "black formal attire",
+        "A formal or semi-formal black long gown, elegant black dresses, or formal black long skirts.",
+      highlight: "black long gown",
     },
     gentlemen: {
-      label: "",
-      details: "",
-      highlight: "",
+      label: "Gentlemen",
+      details:
+        "A black long-sleeved polo shirt with trousers, a suit, or a tuxedo.\n\n" +
+        "Please note: graphic t-shirts and casual streetwear are strictly not allowed.",
+      highlight: "strictly not allowed",
     },
   },
 }
 
 // ── Website address (used for QR codes, link previews, table finder) ────────
 // NEXT_PUBLIC_SITE_URL (env) overrides this when set.
-const SITE_URL = "https://antonia-beatriz-prieto-eighteen-debut.weddinginvitationrsvp.com/" // ⚠ check — still the previous client's domain
+const SITE_URL = "https://jennia-liyen-hecita-bauden-debut.weddinginvitationrsvp.com/" // ⚠ check — confirm the live domain
 // Image shown when the link is shared (Facebook, Messenger, Viber, X, …).
 // Messenger is strict: use a JPG exactly 1200×630, under ~300 KB. When you replace it,
 // change the file name (or bump ?v=) so Facebook fetches the new one instead of its cache.
@@ -284,39 +283,24 @@ const DISPLAY_MODE = "photos" as "photos" | "plain"
 
 // ── Shared images ───────────────────────────────────────────────────────────
 const BRAND = {
-  monogram: "/monogram/new-monogram.png", // botanical "B" (tinted per section)
+  monogram: "/monogram/monogram.png", // botanical "B" (tinted per section)
   // Name lettering image (loader, envelope, proposals). "" = name in script text
   nameImage: "",
-  seal: "/monogram/newseal.png", // envelope wax seal
+  seal: "/monogram/seal.png", // envelope wax seal
   // Theme song — drop the MP3 into /public/background_music with this exact name
   backgroundMusic: "/background_music/Bruno Mars - Just the Way You Are [Official Instrumental].mp3", // ⚠ check — file not added yet
 }
 
 // Celebrant photos used in "photos" mode (loader, envelope, hero, reminders,
-// snap & share, closing) — Bea's debut shoot in /public/mobile-background.
+// snap & share, closing) — Lilay's debut shoot in /public/mobile-background.
 // The /gallery page reads every file in /public/gallery.
-// Every photo file by its number (add new ones here as Bea's photos come in).
-const PHOTO_FILES: Record<number, string> = {
-  1: "debut (1).jpg",
-  2: "debut (2).jpg",
-  3: "debut (3).jpg",
-  4: "debut (4).jpg",
-  5: "debut (5).png",
-  6: "debut (6).png",
-  7: "debut (7).png",
-  8: "debut (8).png",
-  9: "debut (9).png",
-  10: "debut (10).png",
-  11: "debut (11).png",
-  12: "debut (12).png",
-  13: "debut (13).png",
-  14: "debut (14).png",
-  15: "debut (15).png",
-  16: "debut (16).png",
-}
+// Every photo file by its number (add new ones here as Lilay's photos come in).
+const PHOTO_FILES: Record<number, string> = Object.fromEntries(
+  Array.from({ length: 12 }, (_, i) => [i + 1, `debut (${i + 1}).webp`]),
+)
 // Photo numbers that should never be shown on the invitation (loader, hero, etc.).
 // The /gallery page shows every file in /public/gallery.
-export const HIDDEN_PHOTOS = [4, 7]
+export const HIDDEN_PHOTOS: number[] = []
 // Favorites picked for specific spots: PHOTO(n) = public/mobile-background/debut (n)
 const PHOTO = (n: number) =>
   PHOTO_FILES[n] && !HIDDEN_PHOTOS.includes(n)
@@ -430,12 +414,18 @@ export const siteConfig = {
   },
   // Top hero on the main page (components/sections/hero.tsx)
   hero: {
-    srTitle: "You're invited to the debut of {celebrant} — Antonia Beatriz Prieto turns eighteen",
-    kicker: "You are invited to the debut of", // Small line above the name ("" hides it)
+    srTitle: "You're invited to the debut of {celebrant} — Jennia Liyen Hecita Bauden turns eighteen",
+    // Ornate mask floating above the invitation line ("" hides it)
+    crestImage: "/images/Ornate Venetian Masquerade Mask with Red Feathers.png",
+    kicker: "You are cordially invited to the masquerade of", // Small line above the name ("" hides it)
     titleMain: "{celebrant}", // Nickname in large gold script
     eyebrow: CELEBRANT.fullName, // Full name in caps under the nickname ("" hides it)
     titleScript: "turns eighteen", // Script line above the date ("" hides it)
-    countdownHeading: "Until {celebrant}'s grand entrance",
+    // Italic line under the date ("" hides it)
+    tagline: "Behind every mask is a story. Come write the first chapter of mine.",
+    // Weekday · time · venue under the tagline (from ceremony); false hides it
+    showMeta: true,
+    countdownHeading: "Until the masquerade begins",
     countdownLabels: {
       days: "Days",
       hours: "Hours",
@@ -446,17 +436,22 @@ export const siteConfig = {
   // Welcome letter (components/sections/welcome.tsx)
   welcome: {
     // Header lockup: title (serif caps) → connector (small caps between gold rules) → script
-    title: "A Night",
-    connector: "in honor of", // "" hides this line
-    script: "Eighteen",
+    title: "The Mystery",
+    connector: "unfolds", // "" hides this line
+    script: "at eighteen",
+    // Featured pull-quote under the title, between gold rules ("" hides it)
+    quote: "Behind every mask is a story. Come write the first chapter of mine.",
+    // Opening line of the letter ("" hides it)
+    greeting: "To the people who shaped my story,",
     paragraphs: [
-      "Eighteen years of growing, learning, and becoming. Looking back, I see a story filled with little moments, lessons, answered prayers, and blessings I could never fully put into words.",
-      "I am grateful for the family who has been my foundation and, above all, for God's grace that has guided me through every season.",
-      "As I step into this new chapter, I carry with me everything that has shaped me, with faith for all that is yet to come.",
-      "And now, as this milestone calls for a little celebration, I've put together the details to help you prepare for the evening. From the program and venue to the dress code and a few gentle reminders, everything you'll need to know is laid out in the pages ahead.",
-      "May this evening become another beautiful memory in a life already filled with so much to be grateful for. Thank you for being part of something so meaningful. Your presence would make this occasion all the more special.",
+      "For eighteen years, you have watched me grow — through every quiet season, every lesson, and every small victory. Now, as I step out of the shadows of youth and into the light of adulthood, there is no one I would rather have beside me to witness it.",
+      "You are cordially invited to an evening of mystery, elegance, and celebration: a modern Venetian Masquerade, where we will share cherished traditions, count down together to the stroke of the night, and step into the future completely unmasked.",
+      "Come dressed in noir, bring your finest mask, and let the evening keep its secrets until the very last moment. Everything you need — the program, the venue, and the dress code — waits in the pages ahead.",
     ],
-    signOff: "With all my love and gratitude,",
+    // "The evening at a glance" — short moments from the program ([] hides the strip)
+    highlightsTitle: "The evening at a glance",
+    highlights: ["The Grand Reveal", "The Mystery Waltz", "The Royal Banquet", "The Unmasking Hour"],
+    signOff: "Until the masks come off,",
     signature: "{celebrant}",
   },
   // Opening "Save the Date" loading screen (components/loader/LoadingScreen.tsx).
@@ -470,15 +465,24 @@ export const siteConfig = {
     // Date / time / venue in the details row come from ceremony.
     gala: {
       photo: "/Details/debutant.png", // cut-out portrait (transparent background)
-      eyebrow: "Chapter XVIII",
+      eyebrow: "You are cordially invited to the masquerade of",
+      // Gilded corner pieces on the loader ("" hides one)
+      corners: {
+        topLeft: "/deco/top-left.png",
+        topRight: "/deco/top-right.png",
+        bottomLeft: "/deco/bottom-left.png",
+        bottomRight: "/deco/bottom-right.png",
+      },
+      // Date · time and venue under the full name (from ceremony); false hides them
+      showDetails: true,
       cardEyebrow: "You're Invited", // top line on the paper card inside the envelope
       // Invitation line on the paper card, above the name ("" hides it)
-      cardLine: "Her family joyfully invites you to celebrate the debut of",
+      cardLine: "You are cordially invited to an evening of mystery, elegance, and celebration",
       title: "{celebrant}", // nickname in gold script
       subtitle: CELEBRANT.fullName, // full name in caps beneath
-      taglineLeft: ["A celebration", "of youth, grace,", "and new", "beginnings"],
-      taglineRight: ["Among", "familiar hearts", "and cherished", "company"],
-      kicker: "Celebrating her",
+      taglineLeft: ["Behind", "every mask", "is a", "story"],
+      taglineRight: ["Come write", "the first", "chapter", "of mine"],
+      kicker: "A Venetian Masquerade",
       // Ghost lettering that drifts down the left edge and up the right ([] hides it)
       ghostText: ["{celebrant}", CELEBRANT.fullName, "Eighteen"],
       occasionNumber: CELEBRANT.age,
@@ -505,8 +509,8 @@ export const siteConfig = {
     coupleNameImage: BRAND.nameImage,
     // Polaroids that rise out of the envelope: [left, right, then extra desktop spots]
     photos: [
-      "/mobile-background/debut (38).webp", // left
-      "/mobile-background/debut (24).webp", // right
+      PHOTO(1), // left
+      PHOTO(2), // right
       PHOTO(6),
       PHOTO(10),
     ],
@@ -514,30 +518,30 @@ export const siteConfig = {
     // Wording around the celebrant's name (both modes; "" to hide a line)
     plainInvite: {
       ornament: DECOR.headerOrnament, // sprig on the envelope letter ("" = none)
-      lineAbove: "With love and joy, you are invited to celebrate the debut of",
+      lineAbove: "You are cordially invited to an evening of mystery, elegance, and celebration —",
       lineBelow: "",
     },
     // Two numbered highlights, like a poster's "01 / 02" offers ([] hides the row)
     highlights: [
-      { label: "Dress Code", text: "Burgundy, red, black & gold" },
-      { label: "The Night", text: "Roses, candlelight & gold" },
+      { label: "Dress Code", text: "Elegant Noir & Masquerade Venetian" },
+      { label: "The Night", text: "A modern Venetian Masquerade" },
     ],
     // Bottom details row — {guestsTime}, {programTime}, {endTime}, {venue} are filled in
     showCeremonyDetails: true,
     details: [
       { label: "Doors", value: "{guestsTime}" },
       { label: "Venue", value: "{venue}" },
-      { label: "Until", value: "{endTime}" },
+      { label: "Program", value: "{programTime}" },
     ],
     // Used by the envelope (components/loader/Hero.tsx)
     eyebrow: "You are invited",
-    message: "An evening of roses, gold & gratitude",
+    message: "An evening of mystery, elegance & celebration",
     // Rotates under the progress bar while the invitation loads
     statusMessages: [
-      "Arranging eighteen roses",
-      "Lighting eighteen candles",
-      "Setting the tables",
-      "Saving your seat",
+      "Polishing the masks",
+      "Lighting the candelabras",
+      "Setting the royal banquet",
+      "Saving your seat at the ball",
     ],
     durationMs: 8000, // minimum — longer only if the files are still loading
     // Invitation envelope (components/loader/Hero.tsx) — shares display + photos with loader above
@@ -550,59 +554,136 @@ export const siteConfig = {
   // Plain mode shows each note as a card; photos mode adds the chapter image.
   loveStory: {
     title: "My Story",
-    subtitle: "four chapters, eighteen years",
+    subtitle: "twelve chapters, eighteen years",
     // Word before each card's number, e.g. "Chapter 01"
     chapterLabel: "Chapter",
     closingQuote:
-      "For I know the plans I have for you, plans to give you hope and a future.",
-    closingCitation: "Jeremiah 29:11",
+      "Behind every mask is a story. Thank you for being part of mine.",
+    closingCitation: "{celebrant}",
     eucalyptusDecos: {
       topLeft: DECOR.sideLeft,
       bottomRight: DECOR.sideRight,
       timelineTop: DECOR.headerOrnament,
       sectionBottom: DECOR.footerVine,
     },
-    // Four chapters, one per photo (PHOTO(n) = public/mobile-background/debut (n)).
-    // Keep each to one or two short paragraphs so the cards stay light on phones.
+    // Ornate corners on each chapter photo — alternate per chapter:
+    // chapters 1, 3, 5… use top-left + bottom-right; 2, 4, 6… use top-right + bottom-left
+    photoCorners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
+    // Twelve chapters, one per photo (PHOTO(n) = public/mobile-background/debut (n).webp).
+    // ⚠ check — written around the masquerade theme; ask the family to personalize
+    // any chapter with real names, places, or memories.
     chapters: [
       {
-        // 1 — the beginning
-        title: "Beginnings",
+        title: "The First Light",
         theme: "light" as const,
         layout: "image-left" as const,
-        image: PHOTO(6),
+        image: PHOTO(1),
         paragraphs: [
-          "Eighteen years hold more memories than I could ever put into words. Yet before the milestones, the changes, and everything that came with growing up, there was a childhood rooted in Victorias—a place that holds some of my earliest and fondest memories. Much of who I am today was shaped by the people who cared for me, looked after me, and made even the simplest moments feel like home. Those were the days when happiness came easily, time seemed to move a little slower, and all I really had to do was enjoy being a child.",
+          "Every story begins in the dark before the curtain rises. Mine began with a family who waited, prayed, and welcomed me with open arms — the very first audience to ever see my face.",
         ],
       },
       {
-        // 2 — growing up
-        title: "Beyond the Beginning",
+        title: "Little Masks",
         theme: "dark" as const,
         layout: "image-right" as const,
+        image: PHOTO(2),
+        paragraphs: [
+          "As a child, I wore a hundred different faces: princess, dreamer, explorer, storyteller. Every game of pretend was a small rehearsal for the person I would one day become.",
+        ],
+      },
+      {
+        title: "Home & Hearth",
+        theme: "light" as const,
+        layout: "image-left" as const,
+        image: PHOTO(3),
+        paragraphs: [
+          "Long before I knew what a ballroom was, I knew what home felt like — warm meals, familiar voices, and the people who loved me exactly as I was. They are the foundation of every chapter that followed.",
+        ],
+      },
+      {
+        title: "Lessons in Grace",
+        theme: "dark" as const,
+        layout: "image-right" as const,
+        image: PHOTO(4),
+        paragraphs: [
+          "School taught me more than lessons on paper. It taught me patience, courage, and how to stand back up with grace whenever I stumbled.",
+        ],
+      },
+      {
+        title: "Kindred Hearts",
+        theme: "light" as const,
+        layout: "image-left" as const,
         image: PHOTO(5),
         paragraphs: [
-          "As I grew older, my world slowly became bigger. I was usually more of a listener than a talker, comfortable observing and taking things as they came. My school years were filled with everyday moments, childhood friendships, shared laughter, and little experiences that became memories of their own. I was content with keeping things simple and finding my place in the world at my own pace. Looking back, those ordinary days were part of what made growing up special.",
+          "Somewhere along the way, I found my people — friends who laughed with me, kept my secrets, and stayed. Some stories are only worth telling because of the ones who shared them.",
         ],
       },
       {
-        // 3 — the people
-        title: "In Time",
-        theme: "light" as const,
-        layout: "image-left" as const,
-        image: "/mobile-background/debut (14).png",
-        paragraphs: [
-          "As the years passed, life slowly brought new changes and a different rhythm to the way I grew up. I found myself sharing more moments with the people closest to me, learning to appreciate the little things that once felt unfamiliar. Some relationships grew stronger with time, and what used to be occasional moments gradually became part of everyday life. In their own quiet way, these changes became some of the most meaningful parts of growing up.",
-        ],
-      },
-      {
-        // 4 — tonight
-        title: "With Time and Grace",
+        title: "The Quiet Seasons",
         theme: "dark" as const,
         layout: "image-right" as const,
-        image: "/mobile-background/debut (8).png",
+        image: PHOTO(6),
         paragraphs: [
-          "Looking back, I realize that the person I am today has been shaped by everything life has brought my way. Much of it comes from my mom, whose efforts and sacrifices have given me more than I could ever put into words. Through the good, the difficult, and even the moments I felt misunderstood, I learned something about myself along the way. I may not have everything figured out, but as I welcome eighteen, I look forward to new experiences, fresh beginnings, and all that is yet to come.",
+          "Not every chapter was easy. There were seasons of doubt and silence, but they shaped me in ways the bright days never could. Behind every mask, I learned, is a heart still growing.",
+        ],
+      },
+      {
+        title: "Finding My Voice",
+        theme: "light" as const,
+        layout: "image-left" as const,
+        image: PHOTO(7),
+        paragraphs: [
+          "Slowly, I stopped hiding behind the masks. I began to discover what I love, what I believe, and who I want to be — and I learned that being myself was the bravest role of all.",
+        ],
+      },
+      {
+        title: "Faith in the Unseen",
+        theme: "dark" as const,
+        layout: "image-right" as const,
+        image: PHOTO(8),
+        paragraphs: [
+          "Through every turn, I was never alone. Prayers whispered by the people who love me, and grace I could not always see, carried me further than I could have gone on my own.",
+        ],
+      },
+      {
+        title: "Rouge & Noir",
+        theme: "light" as const,
+        layout: "image-left" as const,
+        image: PHOTO(9),
+        paragraphs: [
+          "I grew into my own colors — a little bold, a little mysterious, and entirely mine. Like red against black, I learned that strength and softness can belong to the same story.",
+        ],
+      },
+      {
+        title: "The Waltz of Time",
+        theme: "dark" as const,
+        layout: "image-right" as const,
+        image: PHOTO(10),
+        paragraphs: [
+          "The years moved like a waltz: slow at first, then suddenly spinning. One moment I was a little girl at the window; the next, I was counting down to eighteen.",
+        ],
+      },
+      {
+        title: "On the Eve",
+        theme: "light" as const,
+        layout: "image-left" as const,
+        image: PHOTO(11),
+        paragraphs: [
+          "Now the candles are lit and the masks are ready. Before I step into the light, I look back with gratitude at everyone who walked with me to this night.",
+        ],
+      },
+      {
+        title: "Unmasked",
+        theme: "dark" as const,
+        layout: "image-right" as const,
+        image: PHOTO(12),
+        paragraphs: [
+          "At the stroke of the Grand Countdown, the masks will come off and a new chapter will begin. I would be honored to have you there as I step into the future — completely myself, completely unmasked.",
         ],
       },
     ],
@@ -615,10 +696,17 @@ export const siteConfig = {
     description:
       "From my very first steps to this new chapter — every photo holds a memory I treasure.",
     footnote:
-      "More pictures will be added after the debut. Please check back — this gallery is still growing.",
-    buttonText: "View Full Gallery",
+      "Tap any photo to view it up close. More moments will be added after the masquerade.",
+    buttonText: "View Full Gallery", // button removed from the section; kept for the /gallery page
     buttonHref: "/gallery",
     decos: { ...SECTION_DECOS },
+    // Mask & rose corner pieces on the section ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     images: CELEBRANT_PHOTOS.map((image) => ({ image, text: "" })),
   },
   // Countdown section (components/sections/countdown.tsx)
@@ -630,10 +718,17 @@ export const siteConfig = {
   // Venue name, address, date, times, map and photos come from VENUE above.
   // In reminder text, {guestsTime}, {ceremonyTime} and {endTime} are filled in.
   eventDetails: {
-    eyebrow: "The Celebration",
+    eyebrow: "The Masquerade",
     title: "Event Details",
-    subtitle: "the night of my debut",
-    description: "Everything you need to know for an unforgettable night.",
+    subtitle: "where the mystery unfolds",
+    description: "Everything you need for an evening of mystery and elegance — the venue, the dress code, and a few gentle notes before the masks come out.",
+    // Mask & rose corner pieces: on the section, and in pairs on the venue + attire cards ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     decos: { ...SECTION_DECOS },
     venues: VENUE_CARDS,
     labels: {
@@ -646,12 +741,12 @@ export const siteConfig = {
     },
     attire: {
       title: "Attire Guidelines",
-      description: "The evening awaits. Kindly opt for sophisticated formal wear with timeless and modest styling.",
+      description: "To maintain the mysterious and unified look of our Venetian ball, we kindly ask all guests to strictly follow our all-black formal palette.",
       paletteTitle: "Dress Code Palette",
-      paletteSubtitle: "Black",
-      colorGuideTitle: "Dress Code: Black Formal",
+      paletteSubtitle: "All Black",
+      colorGuideTitle: "Dress Code: Elegant Noir & Masquerade Venetian",
       colorGuideNote:
-        "Kindly come dressed in black formal wear. Think classic silhouettes, refined details, and tasteful styling. Please avoid overly casual or revealing outfits.",
+        "To maintain the mysterious and unified look of our Venetian ball, we kindly ask all guests to strictly follow our all-black formal palette.",
       // Order and visibility come from ATTIRE.show (skips blanks, typos and repeats)
       groups: ATTIRE.show
         .filter((id, i, list) => ["sponsors", "entourage", "guests"].includes(id) && list.indexOf(id) === i)
@@ -670,7 +765,7 @@ export const siteConfig = {
           variant: "accent" as "accent" | "soft",
           showPalette: true, // color strip after the first paragraph
           paragraphs: [
-            "Kindly keep it elegant, tasteful, and modest.",
+            "Elegant Noir & Masquerade Venetian — please strictly follow our all-black formal palette. Graphic t-shirts and casual streetwear are not allowed.",
           ],
         },
         {
@@ -686,7 +781,7 @@ export const siteConfig = {
           variant: "accent" as "accent" | "soft",
           showPalette: false,
           paragraphs: [
-            "Feel free to take photos and videos throughout the evening! We kindly ask that you allow our official photographers to take the lead during the entrance, 18 Roses, and 18 Candles ceremony so every special moment can be captured beautifully.",
+            "Feel free to take photos and videos throughout the evening! We kindly ask that you let our official photographers take the lead during the Grand Reveal Entrance, the Mystery Waltz, and the Unmasking Hour so every moment is captured beautifully.",
           ],
         },
         {
@@ -698,11 +793,11 @@ export const siteConfig = {
           ],
         },
         {
-          title: "After Party",
+          title: "The Unmasking Hour",
           variant: "accent" as "accent" | "soft",
           showPalette: false,
           paragraphs: [
-            "As the evening's festivities come to a close, the night is far from over. Stay beyond 8:30 PM and keep the celebration going. See you after hours!",
+            "Bring your mask and stay for the Grand Countdown & Unmasking Hour at 8:30 PM, followed by the Illuminated Pathway & the Grand Toast at 9:00 PM.",
           ],
         },
       ],
@@ -733,12 +828,11 @@ export const siteConfig = {
     //   icon:     "sun" | "moon" | "crown" | "rose" | "gift" | "toast" | "candle" |
     //             "music" | "video" | "dinner" | "arrival" | "dance" | "departure" | …
     //   description: optional extra line ("" to hide)
-    // ⚠ check — placeholder program for Bea's debut; replace with the family's final flow
     events: [
       {
         show: true,
-        time: "5:00 – 5:30 PM",
-        title: "Arrival of Guests",
+        time: "6:00 PM",
+        title: "The Venetian Arrival",
         description: "",
         location: "",
         image: "/debut-timeline/message.png",
@@ -746,26 +840,8 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "5:30 – 5:45 PM",
-        title: "Opening Prayer & Welcome Remarks",
-        description: "",
-        location: "",
-        image: "/debut-timeline/Invocation.png",
-        icon: "sun" as TimelineIconName,
-      },
-      {
-        show: true,
-        time: "5:45 – 5:55 PM",
-        title: "Pre-Debut Video",
-        description: "",
-        location: "",
-        image: "/debut-timeline/Processional.png",
-        icon: "video" as TimelineIconName,
-      },
-      {
-        show: true,
-        time: "5:55 – 6:05 PM",
-        title: "Grand Entrance of the Debutante",
+        time: "6:30 PM",
+        title: "The Grand Reveal Entrance",
         description: "",
         location: "",
         image: "/debut-timeline/assembly.png",
@@ -773,8 +849,8 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "6:05 – 6:20 PM",
-        title: "Cotillion de Honor",
+        time: "7:00 PM",
+        title: "The Mystery Waltz",
         description: "",
         location: "",
         image: "/debut-timeline/dance-party.png",
@@ -782,35 +858,8 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "6:20 – 6:50 PM",
-        title: "18 Roses",
-        description: "",
-        location: "",
-        image: "/debut-timeline/18roses-candle-lighting.png",
-        icon: "rose" as TimelineIconName,
-      },
-      {
-        show: true,
-        time: "6:50 – 7:15 PM",
-        title: "18 Candles & 18 Treasures",
-        description: "",
-        location: "",
-        image: "/debut-timeline/18roses-candle-lighting.png",
-        icon: "candle" as TimelineIconName,
-      },
-      {
-        show: true,
-        time: "7:15 – 7:30 PM",
-        title: "Message from the Debutante & Toast",
-        description: "",
-        location: "",
-        image: "/debut-timeline/debutant-speech.png",
-        icon: "toast" as TimelineIconName,
-      },
-      {
-        show: true,
-        time: "7:30 – 8:30 PM",
-        title: "Dinner",
+        time: "7:30 PM",
+        title: "Royal Banquet & Parlor Games",
         description: "",
         location: "",
         image: "/debut-timeline/dinner.png",
@@ -818,21 +867,21 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "8:30 – 10:00 PM",
-        title: "After Party",
+        time: "8:30 PM",
+        title: "The Grand Countdown & Unmasking Hour",
         description: "",
         location: "",
-        image: "/debut-timeline/dance-party.png",
-        icon: "dance" as TimelineIconName,
+        image: "/debut-timeline/18roses-candle-lighting.png",
+        icon: "candle" as TimelineIconName,
       },
       {
         show: true,
-        time: "10:00 PM",
-        title: "Farewell & Thank You",
+        time: "9:00 PM",
+        title: "The Illuminated Pathway & The Grand Toast",
         description: "",
         location: "",
-        image: "/debut-timeline/end-program.png",
-        icon: "moon" as TimelineIconName,
+        image: "/debut-timeline/debutant-speech.png",
+        icon: "toast" as TimelineIconName,
       },
     ],
   },
@@ -842,7 +891,7 @@ export const siteConfig = {
   entourage: {
     // ⚠ Shown on request while googleAPI.entourage still points to the template's
     // sheet — it lists a previous client's wedding party (Parents of the Groom/Bride,
-    // Best Man, …). Swap in Bea's own sheet before sharing the invitation.
+    // Best Man, …). Swap in Lilay's own sheet before sharing the invitation.
     show: true,
     eyebrow: "My Eighteen",
     title: "The Entourage",
@@ -1083,7 +1132,7 @@ export const siteConfig = {
       {
         question: "What should I wear?",
         answer:
-          "Come in your most elegant best — formal or semi-formal, whatever makes you feel wonderful.\n\nPlease dress in the colors of the evening: burgundy, red, black, or gold.\n\nSee the [Attire Guidelines](#details) for more.",
+          "Our dress code is Elegant Noir & Masquerade Venetian — please strictly follow our all-black formal palette.\n\n• Ladies: a formal or semi-formal black long gown, elegant black dresses, or formal black long skirts.\n• Gentlemen: a black long-sleeved polo shirt with trousers, a suit, or a tuxedo.\n\nGraphic t-shirts and casual streetwear are strictly not allowed. See the [Attire Guidelines](#details) for more.",
       },
       {
         question: "What time should I arrive?",
@@ -1093,7 +1142,7 @@ export const siteConfig = {
       {
         question: "Where is the celebration?",
         answer:
-          "The venue will be announced soon. We'll update this invitation with the address, map, and directions — please check back in [Event Details](#details).",
+          "The masquerade will be held at {venueName}, {venueAddress}. Tap Get Directions in [Event Details](#details) or scan the QR code to open the map.",
       },
       {
         question: "May I bring a plus one?",
@@ -1106,9 +1155,9 @@ export const siteConfig = {
           "Please let us know as soon as you can, so your seat can be offered to another guest.",
       },
       {
-        question: "Is parking available?",
+        question: "Should I bring a mask?",
         answer:
-          "Parking details will be shared together with the venue. Please allow a few extra minutes to park and make your way in.",
+          "Yes! This is a modern Venetian Masquerade — bring your mask and wear it until the Grand Countdown & Unmasking Hour.",
       },
       {
         question: "May I take photos and videos?",
@@ -1123,7 +1172,7 @@ export const siteConfig = {
       {
         question: "How long is the celebration?",
         answer:
-          "The program begins at {programTime}, followed by dinner and an after party. The night comes to a close at {endTime}.",
+          "Guests arrive at {guestsTime} and the Grand Reveal Entrance begins at {programTime}. The night ends with the Illuminated Pathway & the Grand Toast at 9:00 PM.",
       },
       {
         question: "I have dietary restrictions or allergies.",
@@ -1479,13 +1528,13 @@ export const siteConfig = {
     guests: {
       title: "Guests",
       label: "Guests",
-      description: "Your best formal look in burgundy, red, black, or gold.",
+      description: "Elegant Noir & Masquerade Venetian — all-black formal attire.",
       image: "",
       palette: ["#C0C0C6", "#8E8E96", "#3A3A40", "#111013"],
     },
-    paletteNote: `Our theme is ${EVENT.theme}: ${EVENT.colors}. Guests: wear burgundy, red, black, or gold.`,
+    paletteNote: `Our theme is ${EVENT.theme}: ${EVENT.colors}. Guests: all-black formal attire.`,
     closing: "Thank you for helping make this night so special. I can't wait to celebrate with you!",
-    note: "Kindly wear burgundy, red, black, or gold.",
+    note: "Kindly follow our all-black formal palette.",
   },
   narratives: {
     ourStory: "",
@@ -1528,9 +1577,9 @@ export const siteConfig = {
     // Photos mode — full-screen background that slowly crossfades between the photos.
     // Phones (portrait) use "mobile", tablets / desktops (landscape) use "desktop".
     photos: {
-      mobile: [16, 15, 14, 13, 12, 11, 10, 9, 8, 6, 5].map(PHOTO),
+      mobile: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO),
       // Same portraits on wide screens (cropped to fill, framed on her face)
-      desktop: [16, 15, 14, 13, 12, 11, 10, 9, 8, 6, 5].map(PHOTO),
+      desktop: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO),
     },
     photoAlt: "{celebrant}",
     // Plain mode
@@ -1557,8 +1606,8 @@ export const siteConfig = {
     noteTitle: "A Note From Me",
     // Typed out one after another
     quotes: [
-      "She is clothed in strength and dignity, and she laughs without fear of the future. – Proverbs 31:25",
-      "Welcome to my debut website! Eighteen years of love, lessons, and grace — and I'm so grateful to share this night with you.",
+      "Behind every mask is a story. Come write the first chapter of mine.",
+      "Welcome to my debut website! Join me for a modern Venetian Masquerade — an evening of mystery, elegance, and celebration.",
       "Thank you for your love, prayers, and support. I can't wait to celebrate with you!",
     ],
     rsvp: {
