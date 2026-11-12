@@ -300,3 +300,9 @@
 .details-card-corner--br {
   right: clamp(-1.4rem, -3.5vw, -0.8rem);
 }
+
+/* ---- Proposal page: edge lettering stays put while the letter scrolls ---- */
+.red-velvet-root .ghost-marquee.proposal-ghost {
+  position: fixed;
+  z-index: 1;
+}

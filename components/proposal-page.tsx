@@ -13,6 +13,7 @@ import {
 import { useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import Image from "next/image"
 import { motion, AnimatePresence } from "motion/react"
 import { Heart, Check, X, Sparkles } from "lucide-react"
 import localFont from "next/font/local"
@@ -24,6 +25,9 @@ import { Hero as InvitationHero } from "@/components/loader/Hero"
 import { LoadingScreen } from "@/components/loader/LoadingScreen"
 import { InvitePhotoBackdrop } from "@/components/loader/invite-photo-backdrop"
 import { RisingMotes } from "@/components/rising-motes"
+import { GhostMarquee } from "@/components/loader/GhostMarquee"
+import { ghostTextFor } from "@/lib/ghost-text"
+import { useHydratedReducedMotion } from "@/hooks/use-hydrated-reduced-motion"
 import { sectionType, welcomeTitleSize } from "@/lib/section-typography"
 import "@/components/loader/loading-screen.css"
 import "@/components/sections/love-story-red.css"
@@ -455,6 +459,8 @@ function ProposalPageInner({ role }: ProposalPageProps) {
 
   const siteConfig = useSiteConfig()
   const { labels } = siteConfig.proposal
+  const corners = siteConfig.proposal.corners ?? siteConfig.loadingScreen?.gala?.corners
+  const reduceMotion = useHydratedReducedMotion()
   const copyKey = copyKeyFor(role)
   const copy = siteConfig.proposal.copy[copyKey]
   const confirmedDisplayName = (inviteeFromLink || preferredName).trim()
@@ -578,6 +584,41 @@ function ProposalPageInner({ role }: ProposalPageProps) {
 
       {/* Gold dust rising behind the picture and text (content sits at z-10) */}
       <RisingMotes count={40} />
+
+      {/* Ghost lettering down the left edge and up the right (same as the other sections) */}
+      <GhostMarquee
+        text={ghostTextFor(siteConfig)}
+        className="section-ghost proposal-ghost"
+        fontClassName={theSeasons.className}
+        still={!!reduceMotion}
+        repeat={4}
+      />
+
+      {/* Mask & rose corner pieces, fixed to the screen corners */}
+      {corners && (
+        <div className="pointer-events-none fixed inset-0 z-[5]" aria-hidden="true">
+          {(
+            [
+              ["topLeft", "tl"],
+              ["topRight", "tr"],
+              ["bottomLeft", "bl"],
+              ["bottomRight", "br"],
+            ] as const
+          ).map(([key, pos]) =>
+            corners[key] ? (
+              <Image
+                key={key}
+                src={corners[key]}
+                alt=""
+                width={600}
+                height={600}
+                sizes="(max-width: 640px) 30vw, 240px"
+                className={`gallery-corner gallery-corner--${pos}`}
+              />
+            ) : null,
+          )}
+        </div>
+      )}
 
       {loadingOverlayVisible && (
         <div className="invite-photo-backdrop-wrap invite-photo-backdrop-wrap--loading" aria-hidden="true">

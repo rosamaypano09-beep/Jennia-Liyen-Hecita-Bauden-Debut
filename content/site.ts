@@ -256,7 +256,7 @@ const ATTIRE = {
 
 // ── Website address (used for QR codes, link previews, table finder) ────────
 // NEXT_PUBLIC_SITE_URL (env) overrides this when set.
-const SITE_URL = "https://jennia-liyen-hecita-bauden-debut.weddinginvitationrsvp.com/" // ⚠ check — confirm the live domain
+const SITE_URL = "https://jennia-liyen-hecita-bauden-debut.digitalinvitationrsvp.com/" // ⚠ check — confirm the live domain
 // Image shown when the link is shared (Facebook, Messenger, Viber, X, …).
 // Messenger is strict: use a JPG exactly 1200×630, under ~300 KB. When you replace it,
 // change the file name (or bump ?v=) so Facebook fetches the new one instead of its cache.
@@ -908,7 +908,7 @@ export const siteConfig = {
     description:
       "The cherished hearts who will stand beside me on the night the masks come off — family, friends, and everyone who shaped my first eighteen years.",
     // Ornate mask at the top of the arched card ("" hides it)
-    crestImage: "/images/Ornate Venetian Masquerade Mask with Red Feathers.png",
+    crestImage: "",
     // Mask & rose corner pieces on the section ("" hides one)
     corners: {
       topLeft: "/deco/top-left.png",
@@ -1275,7 +1275,7 @@ export const siteConfig = {
     // {celebrant} → nickname. "" hides a line or image.
     qrCard: {
       coupleNameImage: BRAND.nameImage, // name lettering; "" shows the name as text
-      coupleImage: "/Details/debutantattire.png", // illustration beside the text
+      coupleImage: "/Details/debutant.png", // illustration beside the text
       eyebrow: "The debut of",
       title: "Find Your Table",
       script: "please be seated",
@@ -1298,8 +1298,15 @@ export const siteConfig = {
   // A list ([...]) shows one paragraph per line; "" or [] hides that part.
   proposal: {
     decos: { ...CORNER_DECOS },
+    // Mask & rose corner pieces fixed to the screen corners ("" hides one)
+    corners: {
+      topLeft: "/deco/top-left.png",
+      topRight: "/deco/top-right.png",
+      bottomLeft: "/deco/bottom-left.png",
+      bottomRight: "/deco/bottom-right.png",
+    },
     coupleNameImage: BRAND.nameImage, // name lettering at the top of the card; "" shows the name as text
-    coupleImage: "/Details/debutantattire.png", // illustration above the question
+    coupleImage: "/Details/debutant.png", // illustration above the question
     ornament: DECOR.headerOrnament, // small sprig at the top of the card; "" to hide
     // Eucalyptus sprigs on either side of the couple name; "" to hide one
     nameDecos: { left: DECOR.sideLeft, right: DECOR.sideRight },
@@ -1312,9 +1319,9 @@ export const siteConfig = {
     labels: {
       // Two lines above the picture ("" hides one)
       topEyebrow: "A Personal Invitation",
-      topLine: "From my heart to yours",
-      headerEyebrow: "A Special Place", // small gold line above the heading
-      headerScript: "in my 18th Birthday", // big heading under the image
+      topLine: "From behind the mask",
+      headerEyebrow: "A Place in My Court", // small gold line above the heading
+      headerScript: "at my 18th Masquerade", // big heading under the image
       saveTheDate: "Save the Date",
       roleOffered: "Role offered",
       preparedFor: "Prepared for",
@@ -1344,7 +1351,7 @@ export const siteConfig = {
         greeting: "Dear",
         intro: [],
         body: [
-          "Your presence would make this milestone even more meaningful. I would be honored to have you by my side as a symbol of love, friendship, and the beautiful memories we share.",
+          "On the night the masks come off, I want the people who matter most standing beside me. I would be honored to have you in my masquerade court — a symbol of the love, friendship, and beautiful memories we share.",
         ],
         askLead: "",
         askNote: "",
@@ -1357,7 +1364,7 @@ export const siteConfig = {
           subheader: "I couldn't be happier",
           roleLine: "As {role}",
           body: [
-            "Thank you for saying yes! I can't wait to celebrate, laugh, and make memories with you on my eighteenth. Having you be part of the program will make the night even more special.",
+            "Thank you for saying yes! I can't wait to celebrate, waltz, and unmask with you on my eighteenth. Having you in the program will make the night even more special.",
           ],
           signOff: "With love,",
         },
