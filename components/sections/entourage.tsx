@@ -3,6 +3,7 @@
 import { celebrantName } from "@/lib/celebrant"
 import React from "react"
 import { useState, useEffect, useMemo, useRef } from "react"
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "motion/react"
 import localFont from "next/font/local"
 import Image from "next/image"
 import { Section } from "@/components/section"
@@ -184,6 +185,40 @@ function MixedFontText({
       })}
     </>
   )
+}
+
+// ── Scroll effects ──────────────────────────────────────────────────────────
+const revealEase = [0.22, 1, 0.36, 1] as const
+
+// Header lines rise in one after another
+const headerStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13, delayChildren: 0.05 } },
+}
+const headerRise: Variants = {
+  hidden: { opacity: 0, y: 22, filter: "blur(6px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.9, ease: revealEase } },
+}
+
+// Each role group on the card fades up as it scrolls into view
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const reduceMotion = useReducedMotion()
+  return (
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 26, scale: 0.985 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2, margin: "0px 0px -6% 0px" }}
+      transition={{ duration: 0.8, delay, ease: revealEase }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// Wrap each rendered group (skipping the nulls) in a Reveal, keeping its key
+function withReveal(node: React.ReactNode) {
+  if (!React.isValidElement(node)) return node
+  return <Reveal key={node.key ?? undefined}>{node}</Reveal>
 }
 
 function CouplePromiseMark({ kicker, line }: { kicker: string; line: string }) {
@@ -483,8 +518,34 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
   const [isLoading, setIsLoading] = useState(true)
   const [isRetrying, setIsRetrying] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const reduceMotion = useReducedMotion()
+
+  // Header drifts up a little slower than the page and fades as it leaves the top
+  const { scrollYProgress: headerProgress } = useScroll({
+    target: headerRef,
+    offset: ["start end", "end start"],
+  })
+  const headerY = useTransform(headerProgress, [0, 1], reduceMotion ? [0, 0] : [36, -36])
+  const headerFade = useTransform(headerProgress, [0, 0.72, 1], reduceMotion ? [1, 1, 1] : [1, 1, 0.35])
+
+  // Arched card rises and opens to full size as it scrolls in; the crest floats on its own
+  const { scrollYProgress: cardProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "start 35%"],
+  })
+  const cardEntry = useSpring(cardProgress, { stiffness: 120, damping: 26, mass: 0.4 })
+  const cardY = useTransform(cardEntry, [0, 1], reduceMotion ? [0, 0] : [90, 0])
+  const cardScale = useTransform(cardEntry, [0, 1], reduceMotion ? [1, 1] : [0.92, 1])
+  const cardOpacity = useTransform(cardEntry, [0, 0.55], reduceMotion ? [1, 1] : [0, 1])
+  const { scrollYProgress: crestProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  })
+  const crestY = useTransform(crestProgress, [0, 0.5], reduceMotion ? [0, 0] : [40, -14])
+  const crestRotate = useTransform(crestProgress, [0, 0.5], reduceMotion ? [0, 0] : [-4, 0])
 
   const loadParty = async (signal?: AbortSignal, { reload = false } = {}) => {
     const cached = readCachedParty(sponsorsPath)
@@ -546,28 +607,6 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
       controller.abort()
       clearTimeout(updateTimer)
       window.removeEventListener("entourageUpdated", handleEntourageUpdate)
-    }
-  }, [])
-
-  // Intersection Observer for scroll animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
     }
   }, [])
 
@@ -869,36 +908,46 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
       >
         {/* Corner decorations (from site.ts) */}
 
-      <div className={`relative z-20 mx-auto mb-8 max-w-5xl px-3 text-center @container/entourage sm:mb-10 sm:px-4 md:mb-12 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}>
-        <div className="mx-auto mb-4 sm:mb-5 md:mb-6">
+      <motion.div
+        ref={headerRef}
+        className="relative z-20 mx-auto mb-8 max-w-5xl px-3 text-center @container/entourage sm:mb-10 sm:px-4 md:mb-12"
+        style={{ y: headerY, opacity: headerFade }}
+        variants={headerStagger}
+        initial={reduceMotion ? false : "hidden"}
+        whileInView="show"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <motion.div variants={headerRise} className="mx-auto mb-4 sm:mb-5 md:mb-6">
           <MaskDivider />
-        </div>
-        <p
+        </motion.div>
+        <motion.p
+          variants={headerRise}
           className={`${cinzel.className} mx-auto max-w-[20rem] px-2 text-[0.66rem] font-bold uppercase leading-snug tracking-[0.26em] min-[400px]:max-w-none sm:text-[0.8125rem] sm:tracking-[0.32em] md:text-sm`}
           style={onBgGold}
         >
           {content.eyebrow}
-        </p>
-        <div className="mx-auto mt-3 sm:mt-4 md:mt-5">
+        </motion.p>
+        <motion.div variants={headerRise} className="mx-auto mt-3 sm:mt-4 md:mt-5">
           <EntourageTitle title={content.title} subtitle={content.subtitle} />
-        </div>
+        </motion.div>
 
-        <p
+        <motion.p
+          variants={headerRise}
           className="font-goudy-italic mx-auto mt-4 max-w-[34rem] px-3 text-[0.9rem] leading-[1.6] sm:mt-5 sm:text-base md:mt-6 md:text-[1.05rem]"
           style={{ ...onBg, fontWeight: 600 }}
         >
           {content.description}
-        </p>
+        </motion.p>
 
-        <div className="mt-5 sm:mt-6">
+        <motion.div variants={headerRise} className="mt-5 sm:mt-6">
           <OutsideDivider />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div
-        className={`relative z-20 mx-auto max-w-3xl px-4 pb-2 sm:max-w-4xl sm:px-6 md:px-8 @container/entourage-card transition-all duration-1000 delay-300 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
+      <motion.div
+        ref={cardRef}
+        className="relative z-20 mx-auto max-w-3xl origin-bottom px-4 pb-2 sm:max-w-4xl sm:px-6 md:px-8 @container/entourage-card"
+        style={{ y: cardY, scale: cardScale, opacity: cardOpacity }}
       >
         <div className="relative">
           <div
@@ -912,8 +961,9 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
             />
 
             {content.crestImage && (
-              <div
-                className="pointer-events-none absolute left-1/2 top-[5%] z-30 w-[34%] max-w-[230px] -translate-x-1/2"
+              <motion.div
+                className="pointer-events-none absolute left-1/2 top-[5%] z-30 w-[34%] max-w-[230px]"
+                style={{ x: "-50%", y: crestY, rotate: crestRotate }}
                 aria-hidden
               >
                 <Image
@@ -924,7 +974,7 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
                   sizes="(max-width: 640px) 34vw, 230px"
                   className="h-auto w-full drop-shadow-[0_8px_14px_rgba(40,0,8,0.35)]"
                 />
-              </div>
+              </motion.div>
             )}
 
             <div className={`relative z-20 px-5 pb-10 sm:px-8 sm:pb-12 md:px-12 md:pb-14 lg:px-14 ${content.crestImage ? "pt-[33%] sm:pt-[30%]" : "pt-[22%]"}`}>
@@ -953,7 +1003,10 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
               </div>
             ) : (
             <>
-              <CouplePromiseMark kicker={content.coupleKicker} line={content.coupleLine} />
+              <Reveal>
+                <CouplePromiseMark kicker={content.coupleKicker} line={content.coupleLine} />
+              </Reveal>
+              <Reveal delay={0.1}>
               <div className="mb-2 sm:mb-2.5 md:mb-3">
                 <SectionTitle>{content.coupleHeading}</SectionTitle>
                 <div className="flex justify-center">
@@ -969,6 +1022,7 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
                   />
                 </div>
               </div>
+              </Reveal>
               {ROLE_CATEGORY_ORDER.map((category, categoryIndex) => {
                 const members = grouped[category] || []
                 const bridalPartyHasMembers =
@@ -1681,7 +1735,7 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
                     </TwoColumnLayout>
                   </div>
                 )
-              })}
+              }).map(withReveal)}
               
               {/* Display any other categories not in the ordered list */}
               {Object.keys(grouped).filter(cat => !ROLE_CATEGORY_ORDER.includes(cat) && cat !== "Other" && cat !== "Peer Sponsors").map((category) => {
@@ -1700,14 +1754,14 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
                     </TwoColumnLayout>
                   </div>
                 )
-              })}
+              }).map(withReveal)}
 
             </>
             )}
           </div>
         </div>
         </div>
-      </div>
+      </motion.div>
       </Section>
     </div>
   )

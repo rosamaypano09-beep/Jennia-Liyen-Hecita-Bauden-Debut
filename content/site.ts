@@ -300,7 +300,7 @@ const PHOTO_FILES: Record<number, string> = Object.fromEntries(
 )
 // Photo numbers that should never be shown on the invitation (loader, hero, etc.).
 // The /gallery page shows every file in /public/gallery.
-export const HIDDEN_PHOTOS: number[] = []
+export const HIDDEN_PHOTOS: number[] = [2, 9]
 // Favorites picked for specific spots: PHOTO(n) = public/mobile-background/debut (n)
 const PHOTO = (n: number) =>
   PHOTO_FILES[n] && !HIDDEN_PHOTOS.includes(n)
@@ -512,7 +512,7 @@ export const siteConfig = {
     // Polaroids that rise out of the envelope: [left, right, then extra desktop spots]
     photos: [
       PHOTO(1), // left
-      PHOTO(2), // right
+      PHOTO(3), // right
       PHOTO(6),
       PHOTO(10),
     ],
@@ -759,7 +759,7 @@ export const siteConfig = {
       title: "Gentle Reminders",
       description: "A few thoughtful notes so everyone can enjoy the night.",
       // Shown as 9:16 portrait cards; the 1st sits in front, the rest fan out behind it
-      images: [PHOTO(1), PHOTO(2), PHOTO(3), PHOTO(5)],
+      images: [PHOTO(1), PHOTO(3), PHOTO(4), PHOTO(5)],
       // showPalette: shows the dress code palette after the first paragraph
       items: [
         {
@@ -1631,9 +1631,9 @@ export const siteConfig = {
     // Photos mode — full-screen background that slowly crossfades between the photos.
     // Phones (portrait) use "mobile", tablets / desktops (landscape) use "desktop".
     photos: {
-      mobile: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO),
+      mobile: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO).filter(Boolean),
       // Same portraits on wide screens (cropped to fill, framed on her face)
-      desktop: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO),
+      desktop: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(PHOTO).filter(Boolean),
     },
     photoAlt: "{celebrant}",
     // Plain mode
@@ -1740,7 +1740,7 @@ export const siteConfig = {
       title: "Favorite Moments",
       caption: "Share your snapshots to be featured in the keepsake gallery.",
       // 3 photos: two side by side on top (3:4 frames), one wider frame below (4:3, framed on the face)
-      images: [PHOTO(6), PHOTO(1), PHOTO(2)],
+      images: [PHOTO(6), PHOTO(1), PHOTO(3)],
     },
     website: {
       show: true,
